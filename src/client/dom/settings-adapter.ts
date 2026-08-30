@@ -3,7 +3,7 @@ import type { DetectedTarget, Resolution } from '../types.ts'
 import type { AdapterOptions, AdapterReport } from './adapter-types.ts'
 import { reportOnce } from './adapter-types.ts'
 import { applyOwnedIcon, ownedIconMatches } from './owned-icon.ts'
-import { createMismatchHold } from './mismatch-hold.ts'
+import { bindVisibleKick, createMismatchHold } from './mismatch-hold.ts'
 
 interface SettingsMatch {
   buttons: HTMLButtonElement[]
@@ -58,6 +58,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
   const report = (value: AdapterReport): void => emit(value)
 
   const hold = createMismatchHold(() => schedule())
+  const unbindVisible = bindVisibleKick(() => { if (!disposed) hold.kick() })
 
   const sync = (): void => {
     scheduled = false
@@ -66,7 +67,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
     const match = findSettingsMatch(targets)
     if (!match) {
       const hasDialog = settingsDialogs().length > 0
-      if (hold.hold(hasDialog && disposers.size > 0)) return
+      if (hold.noteMismatch(disposers.size > 0, hasDialog)) return
       clearAll()
       report({
         status: hasDialog ? 'unsupported' : 'waiting',
@@ -135,6 +136,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
 
   return () => {
     disposed = true
+    unbindVisible()
     hold.dispose()
     observer.disconnect()
     unsubscribe()

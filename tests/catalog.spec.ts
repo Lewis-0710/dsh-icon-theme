@@ -3,7 +3,7 @@ import { ICON_CATALOG } from '../src/client/catalog.ts'
 
 describe('icon catalog', () => {
   it('ships unique, local, monochrome icons', () => {
-    expect(ICON_CATALOG.length).toBeGreaterThanOrEqual(50)
+    expect(ICON_CATALOG).toHaveLength(121)
     expect(new Set(ICON_CATALOG.map(icon => icon.id)).size).toBe(ICON_CATALOG.length)
     for (const icon of ICON_CATALOG) {
       expect(icon.svg).toMatch(/viewBox="[-+]?\d+(?:\.\d+)? [-+]?\d+(?:\.\d+)? [-+]?\d+(?:\.\d+)? [-+]?\d+(?:\.\d+)?"/)

@@ -12,7 +12,7 @@ DSH 0.1.x 的设置贡献提供稳定 ID 和名称，但尚未提供图标字段
 
 - 通用识别实时生效且经过优先级遮蔽后的 `settings.section` 和 `sidebar.footer.action`；只有侧边栏部分渲染、无法按顺序对应时，才使用经过审核的插件兼容记录。
 - 用 `settings.section:market` 这样的稳定键保存选择，不依赖中文、英文或 DOM 顺序。
-- 内置 50 个 Fluent UI 16 Regular 图标，以及经过审核的 dsh-market 单色原图标。
+- 内置 50 个 Fluent UI 16 Regular 图标、70 个 DSH 官方 UI 图标，以及经过审核的 dsh-market 单色原图标（共 121 个）。
 - 运行时不请求图标 CDN、Iconify、GitHub、webfont，也不扫描其他插件包。
 - 卸载或热重载时完整恢复宿主 SVG 和插件添加的 DOM 标记。
 - 明确区分“当前未渲染”和“非图标卡片”，不会假装已经更改成功。
@@ -36,7 +36,8 @@ npm run build
 dsh plugin --profile web add link:"$PWD"
 ```
 
-兼容范围：DSH `>=0.1.0-rc.6 <0.2.0`。从源码构建需要 Node.js 22 或更高版本。
+DSH peer 兼容范围：`>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0`，
+包含仅在 GitHub 提供源码的 `dsh-v0.1.2-alpha.1` 预览版。从源码构建需要 Node.js 22 或更高版本。
 
 ## 卸载
 

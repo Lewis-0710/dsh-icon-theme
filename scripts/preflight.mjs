@@ -5,6 +5,7 @@ import path from 'node:path'
 const manifest = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 const clientFile = path.resolve('client/client.js')
 const generatedFile = path.resolve('src/client/generated/fluent-icons.ts')
+const officialGeneratedFile = path.resolve('src/client/generated/official-dsh-icons.ts')
 const required = `window.__ModuleLoader__.load({ id: ${JSON.stringify(manifest.name)}, factory: (require) => {`
 
 if (!fs.existsSync('lib/index.js') || !fs.existsSync(clientFile)) throw new Error('build artifacts are missing')
@@ -19,9 +20,12 @@ if (Buffer.byteLength(client) > 500_000) throw new Error(`client bundle is unexp
 const generated = fs.readFileSync(generatedFile, 'utf8')
 const generatedCount = (generated.match(/^  "[^"]+":/gm) ?? []).length
 if (generatedCount !== 50) throw new Error(`expected 50 generated Fluent icons, found ${generatedCount}`)
+const officialGenerated = fs.readFileSync(officialGeneratedFile, 'utf8')
+const officialGeneratedCount = (officialGenerated.match(/^    id: /gm) ?? []).length
+if (officialGeneratedCount !== 70) throw new Error(`expected 70 generated official DSH icons, found ${officialGeneratedCount}`)
 
 for (const requiredFile of ['cordis.patch.yml', 'README.md', 'README.zh.md', 'THIRD_PARTY_NOTICES.md', 'LICENSE']) {
   if (!fs.existsSync(requiredFile)) throw new Error(`missing package file: ${requiredFile}`)
 }
 
-console.log(`preflight ok: ${generatedCount + 1} icons, ${Buffer.byteLength(client)} byte client bundle`)
+console.log(`preflight ok: ${generatedCount + officialGeneratedCount + 1} icons, ${Buffer.byteLength(client)} byte client bundle`)

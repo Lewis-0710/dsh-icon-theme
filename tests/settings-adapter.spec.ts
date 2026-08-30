@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest'
 import { mountSettingsAdapter } from '../src/client/dom/settings-adapter.ts'
-import { MISMATCH_HOLD_MS, MISMATCH_HOLD_TRIES } from '../src/client/dom/mismatch-hold.ts'
+import { MISMATCH_HOLD_MS, MISMATCH_HOLD_TRIES, RESYNC_BURST_MS } from '../src/client/dom/mismatch-hold.ts'
 import type { DetectedTarget, Resolution } from '../src/client/types.ts'
 
 function target(id: string, order: number): DetectedTarget {
@@ -39,6 +39,10 @@ function holdExpired(): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, MISMATCH_HOLD_MS * MISMATCH_HOLD_TRIES + 30))
 }
 
+function firstBurst(): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, RESYNC_BURST_MS[0] + 40))
+}
+
 afterEach(() => { document.body.innerHTML = '' })
 
 describe('mountSettingsAdapter', () => {
@@ -58,6 +62,46 @@ describe('mountSettingsAdapter', () => {
     expect(market.dataset.dshIconThemeId).toBeUndefined()
     expect(market.querySelector(':scope > [data-dsh-icon-theme-glyph]')).toBeNull()
     expect(market.querySelector(':scope > svg[data-original="market"]')).not.toBeNull()
+  })
+
+  it('retries a first-open mismatch until the slot ledger catches up without another DOM mutation', async () => {
+    let targets = [target('general', 0)]
+    document.body.append(settingsDialog(['general', 'market']))
+    const dispose = mountSettingsAdapter({
+      getTargets: () => targets,
+      resolve: () => ({ iconId: 'settings', source: 'preset', reason: 'reasonPreset' }),
+    })
+    expect(document.querySelector('[data-dsh-icon-theme-managed]')).toBeNull()
+    targets = [target('general', 0), target('market', 40)]
+    await firstBurst()
+    expect(document.querySelector('[data-dsh-icon-theme-id="market"]')).not.toBeNull()
+    dispose()
+  })
+
+  it('does not apply partial icons while a first-open mismatch burst is retrying', async () => {
+    document.body.append(settingsDialog(['general']))
+    const dispose = mountSettingsAdapter({
+      getTargets: () => [target('general', 0), target('market', 40)],
+      resolve: () => ({ iconId: 'settings', source: 'preset', reason: 'reasonPreset' }),
+    })
+    await firstBurst()
+    expect(document.querySelector('[data-dsh-icon-theme-managed]')).toBeNull()
+    dispose()
+  })
+
+  it('rescans when the tab becomes visible after a first-open mismatch', async () => {
+    let targets = [target('general', 0)]
+    document.body.append(settingsDialog(['general', 'market']))
+    const dispose = mountSettingsAdapter({
+      getTargets: () => targets,
+      resolve: () => ({ iconId: 'settings', source: 'preset', reason: 'reasonPreset' }),
+    })
+    expect(document.querySelector('[data-dsh-icon-theme-managed]')).toBeNull()
+    targets = [target('general', 0), target('market', 40)]
+    document.dispatchEvent(new Event('visibilitychange'))
+    await tick()
+    expect(document.querySelector('[data-dsh-icon-theme-id="market"]')).not.toBeNull()
+    dispose()
   })
 
   it('fails closed without partially changing rows when ledger and DOM differ', () => {

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest'
 import { mountSidebarAdapter } from '../src/client/dom/sidebar-adapter.ts'
-import { MISMATCH_HOLD_MS, MISMATCH_HOLD_TRIES } from '../src/client/dom/mismatch-hold.ts'
+import { MISMATCH_HOLD_MS, MISMATCH_HOLD_TRIES, RESYNC_BURST_MS } from '../src/client/dom/mismatch-hold.ts'
 import { hasSidebarCompatibilityFingerprint, SIDEBAR_COMPATIBILITY } from '../src/client/sidebar-compat.ts'
 import type { DetectedTarget } from '../src/client/types.ts'
 
@@ -29,6 +29,10 @@ function tick(): Promise<void> {
 
 function holdExpired(): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, MISMATCH_HOLD_MS * MISMATCH_HOLD_TRIES + 30))
+}
+
+function firstBurst(): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, RESYNC_BURST_MS[0] + 40))
 }
 
 afterEach(() => { document.body.innerHTML = '' })
@@ -91,6 +95,42 @@ describe('mountSidebarAdapter', () => {
     })
     expect(original.hasAttribute('data-dsh-icon-theme-managed')).toBe(false)
     expect(original.querySelector('svg')).not.toBeNull()
+    dispose()
+  })
+
+  it('waits when alpha.1 exposes a valid but empty sidebar action slot', () => {
+    document.body.append(slot())
+    const reports: unknown[] = []
+    const dispose = mountSidebarAdapter({
+      getTargets: () => [target('cordis-panel', 0)],
+      resolve: () => ({ iconId: 'apps', source: 'preset', reason: 'reasonPreset' }),
+      onReport: (_surface, report) => reports.push(report),
+    })
+    try {
+      expect(reports.at(-1)).toMatchObject({
+        status: 'waiting',
+        managed: 0,
+        available: 0,
+        total: 1,
+        targets: { 'sidebar.footer.action:cordis-panel': 'not-rendered' },
+      })
+    } finally {
+      dispose()
+    }
+  })
+
+  it('retries when sidebar targets catch up without another slot mutation', async () => {
+    let targets = [target('unknown-a', 0), target('unknown-b', 1)]
+    const action = button('导入会话')
+    document.body.append(slot(action))
+    const dispose = mountSidebarAdapter({
+      getTargets: () => targets,
+      resolve: () => ({ iconId: 'arrow_import', source: 'manual', reason: 'reasonManual' }),
+    })
+    expect(action.hasAttribute('data-dsh-icon-theme-managed')).toBe(false)
+    targets = [target('chat-import', 0)]
+    await firstBurst()
+    expect(action.hasAttribute('data-dsh-icon-theme-managed')).toBe(true)
     dispose()
   })
 

@@ -14,7 +14,7 @@ DSH 0.1.x settings contributions expose stable IDs and labels, but not an icon f
 
 - Discovers live winning `settings.section` and `sidebar.footer.action` contributions generically. Audited per-plugin records are used only when a sidebar is partially rendered and cannot be correlated by order.
 - Stores choices by stable key, such as `settings.section:market`, never by translated labels or DOM position.
-- Ships 50 curated Fluent UI 16 Regular glyphs plus the audited monochrome dsh-market glyph.
+- Ships 50 curated Fluent UI 16 Regular glyphs, 70 official DSH UI glyphs, and the audited monochrome dsh-market glyph (121 total).
 - Uses no icon CDN, webfont, Iconify API, GitHub request, or package scanning at runtime.
 - Restores every host SVG and owned DOM marker on unload or hot reload.
 - Reports non-rendered contributions and non-icon cards instead of pretending they were changed.
@@ -38,7 +38,8 @@ npm run build
 dsh plugin --profile web add link:"$PWD"
 ```
 
-Supported DSH range: `>=0.1.0-rc.6 <0.2.0`. Node.js 22 or newer is required for source builds.
+Supported DSH peer range: `>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0`.
+This includes the source-only `dsh-v0.1.2-alpha.1` GitHub preview. Node.js 22 or newer is required for source builds.
 
 ## Uninstall
 

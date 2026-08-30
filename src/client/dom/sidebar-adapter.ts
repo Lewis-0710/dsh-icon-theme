@@ -3,7 +3,7 @@ import { hasSidebarCompatibilityFingerprint, matchesSidebarCompatibility } from 
 import type { AdapterOptions, TargetAdapterStatus } from './adapter-types.ts'
 import { reportOnce } from './adapter-types.ts'
 import { applyOwnedIcon, ownedIconMatches } from './owned-icon.ts'
-import { createMismatchHold } from './mismatch-hold.ts'
+import { bindVisibleKick, createMismatchHold } from './mismatch-hold.ts'
 
 function directSvg(element: Element): SVGElement | undefined {
   return Array.from(element.children).find(child => child.tagName.toLowerCase() === 'svg') as SVGElement | undefined
@@ -61,6 +61,7 @@ export function mountSidebarAdapter(options: AdapterOptions): () => void {
   }
 
   const hold = createMismatchHold(() => schedule())
+  const unbindVisible = bindVisibleKick(() => { if (!disposed) hold.kick() })
 
   const sync = (): void => {
     scheduled = false
@@ -81,7 +82,7 @@ export function mountSidebarAdapter(options: AdapterOptions): () => void {
       }
     }
     if (!slot) {
-      if (hold.hold(disposers.size > 0)) return
+      if (hold.noteMismatch(disposers.size > 0, false)) return
       clearAll()
       emit({
         status: 'waiting',
@@ -94,8 +95,11 @@ export function mountSidebarAdapter(options: AdapterOptions): () => void {
     }
     const roots = Array.from(slot.children) as HTMLElement[]
     const matches = matchSidebarRoots(targets, roots)
-    if (matches.size === 0 && targets.length > 0 && hold.hold(disposers.size > 0)) return
-    hold.reset()
+    if (roots.length > 0 && matches.size === 0 && targets.length > 0) {
+      if (hold.noteMismatch(disposers.size > 0, true)) return
+    } else {
+      hold.reset()
+    }
 
     const desired = new Set<HTMLElement>()
     let managed = 0
@@ -139,7 +143,9 @@ export function mountSidebarAdapter(options: AdapterOptions): () => void {
     }
     const unmatched = targets.length - matches.size
     emit({
-      status: matches.size > 0 || targets.length === 0 ? 'active' : 'unsupported',
+      status: roots.length === 0 && targets.length > 0
+        ? 'waiting'
+        : matches.size > 0 || targets.length === 0 ? 'active' : 'unsupported',
       managed,
       available,
       total: targets.length,
@@ -182,6 +188,7 @@ export function mountSidebarAdapter(options: AdapterOptions): () => void {
   const unsubscribe = options.subscribe?.(schedule) ?? (() => {})
   return () => {
     disposed = true
+    unbindVisible()
     hold.dispose()
     bodyObserver.disconnect()
     slotObserver.disconnect()

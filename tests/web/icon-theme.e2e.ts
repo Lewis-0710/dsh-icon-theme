@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { chromium, type Browser } from 'playwright'
+import { ICON_CATALOG } from '../../src/client/catalog.ts'
 
 let browser: Browser
 
@@ -151,7 +152,13 @@ describe('built client compatibility fixture', () => {
     await page.addScriptTag({ path: new URL('../../client/client.js', import.meta.url).pathname })
     await page.waitForSelector('[data-target-key="settings.section:market"]')
     await page.locator('[data-target-key="settings.section:market"] .dit-icon-button').click()
-    await expect.poll(async () => page.locator('.dit-grid-item').count()).toBe(51)
+    await expect.poll(async () => page.locator('.dit-grid-item').count()).toBe(ICON_CATALOG.length)
+    const pickerIconIds = await page.locator('.dit-grid-item').evaluateAll(buttons => buttons.map(button => {
+      const title = button.getAttribute('title') ?? ''
+      const separator = title.lastIndexOf(' · ')
+      return separator >= 0 ? title.slice(separator + 3) : title
+    }))
+    expect(pickerIconIds).toEqual(ICON_CATALOG.map(icon => icon.id))
     await page.getByTitle(/ · apps$/).click()
     await expect.poll(async () => page.locator('[data-target-key="settings.section:market"] .dit-source').textContent()).toMatch(/manual/)
     await page.waitForSelector('[data-dsh-icon-theme-id="market"]')
