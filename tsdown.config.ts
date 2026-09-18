@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsdown'
 
-const id = 'dsh-icon-theme'
+const id = 'dsh-icon-theme-custom'
 const externals = ['react', 'react/jsx-runtime']
 
 export default defineConfig({
