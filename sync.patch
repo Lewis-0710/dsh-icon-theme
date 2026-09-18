@@ -1,0 +1,91 @@
+diff --git a/README.md b/README.md
+index 04a8297..9e765d9 100644
+--- a/README.md
++++ b/README.md
+@@ -1,3 +1,11 @@
++> [!NOTE]
++> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
++>
++> **与上游差异**：
++> 1. **脱离主题单选互斥**：包名与 Cordis 插件名变更为 `dsh-icon-theme-custom`，避免命中 `dshmarket` 线上注册表的 `theme` 分类互斥逻辑（`activateTheme`），使图标插件能与 `dsh-theme-liquid-glass` 等纯主题插件无冲突共存。
++>
++> 详见 [sync.patch](./sync.patch)。
++
+ # dsh-icon-theme
+ 
+ English | [简体中文](README.zh.md)
+diff --git a/cordis.patch.yml b/cordis.patch.yml
+index 1a321d4..9057e89 100644
+--- a/cordis.patch.yml
++++ b/cordis.patch.yml
+@@ -1,6 +1,6 @@
+ # Mount the host-side settings owner and its fixed-namespace browser endpoint.
+ - insert:
+-    - id: dsh-icon-theme
+-      name: dsh-icon-theme
++    - id: dsh-icon-theme-custom
++      name: dsh-icon-theme-custom
+       # Keep an explicit composition layer for future pack/policy defaults.
+       config: {}
+diff --git a/package.json b/package.json
+index b1b1cd4..19e57c2 100644
+--- a/package.json
++++ b/package.json
+@@ -1,5 +1,5 @@
+ {
+-  "name": "dsh-icon-theme",
++  "name": "dsh-icon-theme-custom",
+   "version": "0.2.3",
+   "description": "Auto-detected, user-customizable icons for DeepSeek Harness settings and sidebar surfaces.",
+   "type": "module",
+diff --git a/src/client/index.tsx b/src/client/index.tsx
+index 1551adc..5c9ada8 100644
+--- a/src/client/index.tsx
++++ b/src/client/index.tsx
+@@ -28,7 +28,7 @@ interface IconThemeClientContext {
+   on?: (event: string, listener: () => void) => () => void
+ }
+ 
+-export const name = 'dsh-icon-theme'
++export const name = 'dsh-icon-theme-custom'
+ export const inject = ['slots', 'locale']
+ 
+ export function apply(ctx: IconThemeClientContext): void {
+diff --git a/src/index.ts b/src/index.ts
+index 87f3afe..87872bc 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -6,7 +6,7 @@ import { installSettingsApi } from './settings-api.ts'
+ export { Config, DEFAULT_CONFIG, normalizeConfig } from './config.ts'
+ export type { IconThemeConfig } from './config.ts'
+ 
+-export const name = 'dsh-icon-theme'
++export const name = 'dsh-icon-theme-custom'
+ export const inject = ['webServer']
+ 
+ /** Register the durable user layer and fixed-namespace browser seam. */
+diff --git a/tests/host.spec.ts b/tests/host.spec.ts
+index cff748e..7575541 100644
+--- a/tests/host.spec.ts
++++ b/tests/host.spec.ts
+@@ -19,7 +19,7 @@ describe('host settings owner', () => {
+       }),
+     }
+     apply(ctx as never, { ...DEFAULT_CONFIG, overrides: { 'settings.section:market': 'apps' } })
+-    expect(name).toBe('dsh-icon-theme')
++    expect(name).toBe('dsh-icon-theme-custom')
+     expect(inject).toEqual(['webServer'])
+     expect(calls).toHaveLength(1)
+     expect(calls[0]?.[0]).toBe('dsh-icon-theme')
+diff --git a/tsdown.config.ts b/tsdown.config.ts
+index ddd0ed6..290a7c3 100644
+--- a/tsdown.config.ts
++++ b/tsdown.config.ts
+@@ -1,6 +1,6 @@
+ import { defineConfig } from 'tsdown'
+ 
+-const id = 'dsh-icon-theme'
++const id = 'dsh-icon-theme-custom'
+ const externals = ['react', 'react/jsx-runtime']
+ 
+ export default defineConfig({
