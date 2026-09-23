@@ -10,21 +10,15 @@ interface SettingsMatch {
   targets: readonly DetectedTarget[]
 }
 
-/** Third-party markers that indicate a settings row already has a custom icon. */
-export const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = [
-  'data-dsh-better-sidebar-settings-nav',
-  'data-dsh-market-nav-icon',
-  'data-agy-nav-icon',
-  'data-dsh-chat-import-settings-nav',
-  'data-dsh-liquid-glass-settings-nav',
-  'data-dsh-service-nav',
-] as const
-
-export function hasTrustedCustomIcon(button: Element): boolean {
-  if (TRUSTED_THIRD_PARTY_SETTINGS_MARKERS.some(marker => button.hasAttribute(marker))) return true
+/**
+ * Detect whether a settings button has custom third-party marker attributes.
+ * Any non-icon-theme data-* attribute indicates third-party customization.
+ */
+export function hasCustomThirdPartyIcon(button: Element): boolean {
   for (const attr of button.getAttributeNames()) {
-    if (attr.startsWith('data-dsh-icon-theme')) continue
-    if (attr.includes('nav-icon') || attr.includes('settings-nav')) return true
+    if (attr.startsWith('data-') && !attr.startsWith('data-dsh-icon-theme')) {
+      return true
+    }
   }
   return false
 }
@@ -101,7 +95,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
     for (let index = 0; index < match.targets.length; index += 1) {
       const target = match.targets[index]!
       const button = match.buttons[index]!
-      const hasTrustedThirdPartyIcon = hasTrustedCustomIcon(button)
+      const hasTrustedThirdPartyIcon = hasCustomThirdPartyIcon(button)
       const resolution = options.resolve(target, {
         hasOriginal: true,
         originalIsGeneric: !NATIVE_SETTINGS_IDS.has(target.id) && !hasTrustedThirdPartyIcon,
@@ -146,7 +140,6 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['role', 'id', 'aria-labelledby', 'aria-current', 'data-slot', 'data-dsh-icon-theme-managed', 'data-dsh-better-sidebar-settings-nav', 'data-dsh-market-nav-icon'],
   })
   const unsubscribe = options.subscribe?.(schedule) ?? (() => {})
 

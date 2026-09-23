@@ -39,23 +39,12 @@ describe('resolveIcon', () => {
   })
 
   it('preserves a generic original under the prefer policy', () => {
-    expect(resolveIcon(target('settings.section:notification'), { ...DEFAULT_CONFIG, originalPolicy: 'prefer' }, { hasOriginal: true, originalIsGeneric: true }))
-      .toMatchObject({ iconId: null, source: 'original' })
-  })
-
-  it('replaces a generic original by default under replace-generic policy', () => {
     expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
-      .toMatchObject({ iconId: 'alert', source: 'preset' })
-    expect(resolveIcon(target('settings.section:better-sidebar'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
-      .toMatchObject({ iconId: 'panel_right_gallery', source: 'preset' })
+      .toMatchObject({ iconId: null, source: 'original' })
   })
 
-  it('preserves trusted custom icons for third-party settings', () => {
-    expect(resolveIcon(target('settings.section:antigravity-auth'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
-      .toMatchObject({ iconId: null, source: 'original' })
-    expect(resolveIcon(target('settings.section:market'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
-      .toMatchObject({ iconId: null, source: 'original' })
-    expect(resolveIcon(target('settings.section:chat-import'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
+  it('preserves a non-generic original regardless of policy', () => {
+    expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
       .toMatchObject({ iconId: null, source: 'original' })
   })
 

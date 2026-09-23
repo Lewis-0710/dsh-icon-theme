@@ -5,9 +5,9 @@ export const CURATED_PLUGIN_ICONS: Readonly<Record<string, string>> = Object.fre
 export const EXACT_PRESETS: Readonly<Record<string, string>> = Object.freeze({
   'settings.section:general': 'settings',
   'settings.section:dsh-mneme': 'brain',
-  'settings.section:models': 'dsh.data-outline16',
-  'settings.section:plugins': 'dsh.personalization-outline16',
-  'settings.section:agent-presets': 'dsh.agent-preset-outline16',
+  'settings.section:models': 'database',
+  'settings.section:plugins': 'apps',
+  'settings.section:agent-presets': 'people',
   'settings.section:cost-meter': 'wallet',
   'settings.section:dsh-mineru': 'document_pdf',
   'settings.section:at-file': 'document_mention',
@@ -19,15 +19,7 @@ export const EXACT_PRESETS: Readonly<Record<string, string>> = Object.freeze({
   'sidebar.footer.action:bookmarks': 'bookmark',
 })
 
-export const NATIVE_SETTINGS_IDS = new Set(['general', 'models', 'agent-presets', 'plugins', 'desktop'])
-
-export const NATIVE_ORIGINAL_ICONS: Readonly<Record<string, string>> = Object.freeze({
-  general: 'settings',
-  models: 'dsh.data-outline16',
-  'agent-presets': 'dsh.agent-preset-outline16',
-  plugins: 'dsh.personalization-outline16',
-  desktop: 'desktop',
-})
+export const NATIVE_SETTINGS_IDS = new Set(['general', 'models', 'agent-presets', 'plugins'])
 
 const INFERENCE_RULES: ReadonlyArray<{ iconId: string; tokens: readonly string[] }> = [
   { iconId: 'store_microsoft', tokens: ['market', 'store', 'marketplace'] },

@@ -153,28 +153,4 @@ describe('IconThemeSection', () => {
     expect(screen.queryByRole('button', { name: '插件' })).toBeNull()
     store.dispose()
   })
-
-  it('renders official native icons instead of generic gears for native settings sections', () => {
-    const scope = {
-      value: { originalPolicy: 'prefer', overrides: {} },
-      writes: [],
-      getSnapshot() { return { status: 'ready', value: this.value, writable: true } },
-      subscribe() { return () => {} },
-      async set() {},
-      async unset() {},
-    }
-    const slots: SlotLedgerLike = {
-      entriesOfSlot: name => name === 'settings.section'
-        ? [{ options: { id: 'agent-presets', order: 20, label: 'Agent 预设' } }]
-        : [],
-      subscribe: () => () => {},
-    }
-    const store = createIconThemeStore(scope as any, slots)
-    render(<IconThemeSection store={store} t={t} />)
-    const agentRow = screen.getByText('Agent 预设').closest('[data-target-key]') as HTMLElement
-    const agentPreview = agentRow.querySelector('.dit-preview') as HTMLElement
-    expect(agentPreview.querySelector('[data-icon-id="dsh.agent-preset-outline16"]')).toBeTruthy()
-    expect(agentPreview.querySelector('[data-icon-id="settings"]')).toBeNull()
-    store.dispose()
-  })
 })

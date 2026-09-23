@@ -8,8 +8,6 @@ import { ICON_CATALOG } from './catalog.ts'
 import type { AdapterReport, TargetAdapterStatus } from './dom/adapter-types.ts'
 import { SIDEBAR_COMPATIBILITY } from './sidebar-compat.ts'
 
-import { NATIVE_ORIGINAL_ICONS } from './presets.ts'
-
 type Filter = 'all' | 'settings' | 'sidebar' | 'unrecognized' | 'customized'
 
 export interface IconThemeSectionProps {
@@ -22,13 +20,8 @@ function sourceLabel(source: ResolutionSource, t: Translate): string {
   return t(source)
 }
 
-function previewIcon(target: DetectedTarget, iconId: string | null): string {
-  if (iconId) return iconId
-  if (target.surface === 'settings.section') {
-    const native = NATIVE_ORIGINAL_ICONS[target.id]
-    if (native) return native
-  }
-  return 'settings'
+function previewIcon(iconId: string | null): string {
+  return iconId ?? 'settings'
 }
 
 function effectiveResolution(target: DetectedTarget, snapshot: IconThemeSnapshot, store: IconThemeStore): Resolution {
@@ -124,7 +117,7 @@ export function IconThemeSection({ store, t }: IconThemeSectionProps) {
           return (
             <div className="dit-row" key={target.key} data-target-key={target.key}>
               <div className="dit-preview">
-                <IconGlyph iconId={previewIcon(target, resolution.iconId)} />
+                <IconGlyph iconId={previewIcon(resolution.iconId)} />
                 {resolution.source === 'original' && <span className="dit-preview-hint">{t('originalPreviewHint')}</span>}
               </div>
               <div className="dit-name">
