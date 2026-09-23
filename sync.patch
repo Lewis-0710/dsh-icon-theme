@@ -1,0 +1,207 @@
+diff --git a/README.md b/README.md
+index 04a8297..9e765d9 100644
+--- a/README.md
++++ b/README.md
+@@ -1,3 +1,11 @@
++> [!NOTE]
++> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
++>
++> **与上游差异**：
++> 1. **脱离主题单选互斥**：包名与 Cordis 插件名变更为 `dsh-icon-theme-custom`，避免命中 `dshmarket` 线上注册表的 `theme` 分类互斥逻辑（`activateTheme`），使图标插件能与 `dsh-theme-liquid-glass` 等纯主题插件无冲突共存。
++>
++> 详见 [sync.patch](./sync.patch)。
++
+ # dsh-icon-theme
+ 
+ English | [简体中文](README.zh.md)
+diff --git a/cordis.patch.yml b/cordis.patch.yml
+index 1a321d4..9057e89 100644
+--- a/cordis.patch.yml
++++ b/cordis.patch.yml
+@@ -1,6 +1,6 @@
+ # Mount the host-side settings owner and its fixed-namespace browser endpoint.
+ - insert:
+-    - id: dsh-icon-theme
+-      name: dsh-icon-theme
++    - id: dsh-icon-theme-custom
++      name: dsh-icon-theme-custom
+       # Keep an explicit composition layer for future pack/policy defaults.
+       config: {}
+diff --git a/package.json b/package.json
+index b1b1cd4..19e57c2 100644
+--- a/package.json
++++ b/package.json
+@@ -1,5 +1,5 @@
+ {
+-  "name": "dsh-icon-theme",
++  "name": "dsh-icon-theme-custom",
+   "version": "0.2.3",
+   "description": "Auto-detected, user-customizable icons for DeepSeek Harness settings and sidebar surfaces.",
+   "type": "module",
+diff --git a/src/client/dom/settings-adapter.ts b/src/client/dom/settings-adapter.ts
+index 93faa88..331829f 100644
+--- a/src/client/dom/settings-adapter.ts
++++ b/src/client/dom/settings-adapter.ts
+@@ -11,7 +11,10 @@ interface SettingsMatch {
+ }
+ 
+ /** Third-party markers that indicate a settings row already has a custom icon. */
+-const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = ['data-dsh-better-sidebar-settings-nav'] as const
++const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = [
++  'data-dsh-better-sidebar-settings-nav',
++  'data-dsh-market-nav-icon',
++] as const
+ 
+ function directSvg(element: Element): SVGElement | undefined {
+   return Array.from(element.children).find(child => child.tagName.toLowerCase() === 'svg') as SVGElement | undefined
+@@ -130,7 +133,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
+     childList: true,
+     subtree: true,
+     attributes: true,
+-    attributeFilter: ['role', 'id', 'aria-labelledby', 'aria-current', 'data-slot', 'data-dsh-icon-theme-managed', 'data-dsh-better-sidebar-settings-nav'],
++    attributeFilter: ['role', 'id', 'aria-labelledby', 'aria-current', 'data-slot', 'data-dsh-icon-theme-managed', 'data-dsh-better-sidebar-settings-nav', 'data-dsh-market-nav-icon'],
+   })
+   const unsubscribe = options.subscribe?.(schedule) ?? (() => {})
+ 
+diff --git a/src/client/index.tsx b/src/client/index.tsx
+index 1551adc..5c9ada8 100644
+--- a/src/client/index.tsx
++++ b/src/client/index.tsx
+@@ -28,7 +28,7 @@ interface IconThemeClientContext {
+   on?: (event: string, listener: () => void) => () => void
+ }
+ 
+-export const name = 'dsh-icon-theme'
++export const name = 'dsh-icon-theme-custom'
+ export const inject = ['slots', 'locale']
+ 
+ export function apply(ctx: IconThemeClientContext): void {
+diff --git a/src/client/presets.ts b/src/client/presets.ts
+index 6a94734..ef6e95b 100644
+--- a/src/client/presets.ts
++++ b/src/client/presets.ts
+@@ -1,5 +1,6 @@
+ export const CURATED_PLUGIN_ICONS: Readonly<Record<string, string>> = Object.freeze({
+   'settings.section:market': 'plugin.market',
++  'settings.section:icon-theme': 'image',
+ })
+ 
+ export const EXACT_PRESETS: Readonly<Record<string, string>> = Object.freeze({
+@@ -13,7 +14,7 @@ export const EXACT_PRESETS: Readonly<Record<string, string>> = Object.freeze({
+   'settings.section:at-file': 'document_mention',
+   'settings.section:notification': 'alert',
+   'settings.section:better-sidebar': 'panel_right_gallery',
+-  'settings.section:icon-theme': 'color',
++  'settings.section:icon-theme': 'image',
+   'sidebar.footer.action:chat-import': 'arrow_import',
+   'sidebar.footer.action:usage-stats': 'chart_multiple',
+   'sidebar.footer.action:bookmarks': 'bookmark',
+diff --git a/src/client/styles.ts b/src/client/styles.ts
+index 457fbc3..8541c15 100644
+--- a/src/client/styles.ts
++++ b/src/client/styles.ts
+@@ -2,7 +2,9 @@ const STYLE_ID = 'dsh-icon-theme/runtime'
+ 
+ export const STYLE_TEXT = `
+ [data-dsh-icon-theme-managed] > svg:first-of-type { display: none !important; }
++[data-dsh-icon-theme-managed]::before { display: none !important; }
+ [data-dsh-icon-theme-managed][data-dsh-better-sidebar-settings-nav]::before { display: none !important; }
++[data-dsh-icon-theme-managed][data-dsh-market-nav-icon]::before { display: none !important; }
+ [data-dsh-icon-theme-glyph] {
+   width: 16px; height: 16px; flex: 0 0 16px; display: inline-block;
+   background: currentColor;
+diff --git a/src/config.ts b/src/config.ts
+index 70d2865..90da823 100644
+--- a/src/config.ts
++++ b/src/config.ts
+@@ -10,7 +10,7 @@ export const DEFAULT_CONFIG: Readonly<IconThemeConfig> = Object.freeze({
+   originalPolicy: 'prefer',
+ })
+ 
+-export const Config = Schema.object({
++export const Config: Schema<any, IconThemeConfig> = Schema.object({
+   overrides: Schema.dict(Schema.string()).default({}),
+   originalPolicy: Schema.union(['prefer', 'replace-generic']).default(DEFAULT_CONFIG.originalPolicy),
+ })
+diff --git a/src/index.ts b/src/index.ts
+index 87f3afe..87872bc 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -6,7 +6,7 @@ import { installSettingsApi } from './settings-api.ts'
+ export { Config, DEFAULT_CONFIG, normalizeConfig } from './config.ts'
+ export type { IconThemeConfig } from './config.ts'
+ 
+-export const name = 'dsh-icon-theme'
++export const name = 'dsh-icon-theme-custom'
+ export const inject = ['webServer']
+ 
+ /** Register the durable user layer and fixed-namespace browser seam. */
+diff --git a/tests/host.spec.ts b/tests/host.spec.ts
+index cff748e..7575541 100644
+--- a/tests/host.spec.ts
++++ b/tests/host.spec.ts
+@@ -19,7 +19,7 @@ describe('host settings owner', () => {
+       }),
+     }
+     apply(ctx as never, { ...DEFAULT_CONFIG, overrides: { 'settings.section:market': 'apps' } })
+-    expect(name).toBe('dsh-icon-theme')
++    expect(name).toBe('dsh-icon-theme-custom')
+     expect(inject).toEqual(['webServer'])
+     expect(calls).toHaveLength(1)
+     expect(calls[0]?.[0]).toBe('dsh-icon-theme')
+diff --git a/tests/resolve.spec.ts b/tests/resolve.spec.ts
+index 7b87be7..a96d164 100644
+--- a/tests/resolve.spec.ts
++++ b/tests/resolve.spec.ts
+@@ -13,6 +13,7 @@ function target(key: TargetKey): DetectedTarget {
+ describe('resolveIcon', () => {
+   it.each([
+     ['settings.section:market', 'plugin.market', 'plugin'],
++    ['settings.section:icon-theme', 'image', 'plugin'],
+     ['settings.section:notification', 'alert', 'preset'],
+     ['settings.section:unfamiliar-folder-tool', 'folder', 'inferred'],
+   ] as const)('%s resolves to %s', (key, iconId, source) => {
+@@ -20,6 +21,12 @@ describe('resolveIcon', () => {
+       .toMatchObject({ iconId, source, reason: source === 'plugin' ? 'reasonPlugin' : source === 'preset' ? 'reasonPreset' : 'reasonInferred' })
+   })
+ 
++  it('curated icon-theme image icon resolves even under prefer policy with original svg', () => {
++    const key = 'settings.section:icon-theme' as const
++    expect(resolveIcon(target(key), { ...DEFAULT_CONFIG, originalPolicy: 'prefer', overrides: {} }, { hasOriginal: true, originalIsGeneric: true }))
++      .toMatchObject({ iconId: 'image', source: 'plugin' })
++  })
++
+   it('manual overrides win over curated plugin icons', () => {
+     const key = 'settings.section:market' as const
+     expect(resolveIcon(target(key), { ...DEFAULT_CONFIG, overrides: { [key]: 'apps' } }, { hasOriginal: true, originalIsGeneric: true }))
+diff --git a/tests/settings-adapter.spec.ts b/tests/settings-adapter.spec.ts
+index 7d30ab1..461b1e2 100644
+--- a/tests/settings-adapter.spec.ts
++++ b/tests/settings-adapter.spec.ts
+@@ -193,6 +193,14 @@ describe('mountSettingsAdapter', () => {
+     button.removeAttribute('data-dsh-better-sidebar-settings-nav')
+     await tick()
+     expect(button.hasAttribute('data-dsh-icon-theme-managed')).toBe(true)
++
++    button.setAttribute('data-dsh-market-nav-icon', '')
++    await tick()
++    expect(button.hasAttribute('data-dsh-icon-theme-managed')).toBe(false)
++
++    button.removeAttribute('data-dsh-market-nav-icon')
++    await tick()
++    expect(button.hasAttribute('data-dsh-icon-theme-managed')).toBe(true)
+     dispose()
+   })
+ 
+diff --git a/tsdown.config.ts b/tsdown.config.ts
+index ddd0ed6..290a7c3 100644
+--- a/tsdown.config.ts
++++ b/tsdown.config.ts
+@@ -1,6 +1,6 @@
+ import { defineConfig } from 'tsdown'
+ 
+-const id = 'dsh-icon-theme'
++const id = 'dsh-icon-theme-custom'
+ const externals = ['react', 'react/jsx-runtime']
+ 
+ export default defineConfig({
