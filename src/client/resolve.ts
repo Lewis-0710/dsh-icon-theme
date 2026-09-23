@@ -12,12 +12,16 @@ export function resolveIcon(
     return { iconId: manual, source: 'manual', reason: 'reasonManual' }
   }
 
+  if (evidence.hasOriginal && !evidence.originalIsGeneric) {
+    return { iconId: null, source: 'original', reason: 'reasonOriginal' }
+  }
+
   const plugin = CURATED_PLUGIN_ICONS[target.key]
   if (plugin && ICON_BY_ID.has(plugin)) {
     return { iconId: plugin, source: 'plugin', reason: 'reasonPlugin' }
   }
 
-  if (evidence.hasOriginal && (config.originalPolicy === 'prefer' || !evidence.originalIsGeneric)) {
+  if (evidence.hasOriginal && config.originalPolicy === 'prefer') {
     return { iconId: null, source: 'original', reason: 'reasonOriginal' }
   }
 

@@ -1,5 +1,4 @@
 export const CURATED_PLUGIN_ICONS: Readonly<Record<string, string>> = Object.freeze({
-  'settings.section:market': 'plugin.market',
   'settings.section:icon-theme': 'image',
 })
 
@@ -15,12 +14,6 @@ export const EXACT_PRESETS: Readonly<Record<string, string>> = Object.freeze({
   'settings.section:notification': 'alert',
   'settings.section:better-sidebar': 'panel_right_gallery',
   'settings.section:icon-theme': 'image',
-  'settings.section:antigravity-auth': 'dsh.sparkle16',
-  'settings.section:chat-import': 'arrow_import',
-  'settings.section:dsh-service': 'dsh.gauge-outline16',
-  'settings.section:liquid-glass': 'eye',
-  'settings.section:desktop': 'desktop',
-  'settings.section:language-control': 'dsh.code-outline16',
   'sidebar.footer.action:chat-import': 'arrow_import',
   'sidebar.footer.action:usage-stats': 'chart_multiple',
   'sidebar.footer.action:bookmarks': 'bookmark',
@@ -46,14 +39,9 @@ const INFERENCE_RULES: ReadonlyArray<{ iconId: string; tokens: readonly string[]
   { iconId: 'bookmark', tokens: ['bookmark', 'favorite'] },
   { iconId: 'document_pdf', tokens: ['pdf', 'mineru', 'ocr'] },
   { iconId: 'shield_lock', tokens: ['security', 'aegis', 'guard', 'permission'] },
-  { iconId: 'eye', tokens: ['vision', 'visual', 'image', 'glass', 'liquid'] },
+  { iconId: 'eye', tokens: ['vision', 'visual', 'image'] },
   { iconId: 'panel_right_gallery', tokens: ['sidebar', 'side-card', 'panel'] },
   { iconId: 'apps', tokens: ['plugin', 'extension'] },
-  { iconId: 'dsh.sparkle16', tokens: ['antigravity', 'sparkle', 'ai', 'magic'] },
-  { iconId: 'arrow_import', tokens: ['import'] },
-  { iconId: 'dsh.gauge-outline16', tokens: ['service', 'gauge', 'daemon'] },
-  { iconId: 'desktop', tokens: ['desktop'] },
-  { iconId: 'dsh.code-outline16', tokens: ['language', 'code'] },
 ]
 
 export function inferIcon(id: string): string | null {

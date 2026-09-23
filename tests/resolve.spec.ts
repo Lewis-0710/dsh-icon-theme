@@ -12,7 +12,6 @@ function target(key: TargetKey): DetectedTarget {
 
 describe('resolveIcon', () => {
   it.each([
-    ['settings.section:market', 'plugin.market', 'plugin'],
     ['settings.section:icon-theme', 'image', 'plugin'],
     ['settings.section:notification', 'alert', 'preset'],
     ['settings.section:unfamiliar-folder-tool', 'folder', 'inferred'],
@@ -28,7 +27,7 @@ describe('resolveIcon', () => {
   })
 
   it('manual overrides win over curated plugin icons', () => {
-    const key = 'settings.section:market' as const
+    const key = 'settings.section:icon-theme' as const
     expect(resolveIcon(target(key), { ...DEFAULT_CONFIG, overrides: { [key]: 'apps' } }, { hasOriginal: true, originalIsGeneric: true }))
       .toMatchObject({ iconId: 'apps', source: 'manual' })
   })
@@ -47,10 +46,17 @@ describe('resolveIcon', () => {
   it('replaces a generic original by default under replace-generic policy', () => {
     expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
       .toMatchObject({ iconId: 'alert', source: 'preset' })
-    expect(resolveIcon(target('settings.section:antigravity-auth'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
-      .toMatchObject({ iconId: 'dsh.sparkle16', source: 'preset' })
-    expect(resolveIcon(target('settings.section:chat-import'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
-      .toMatchObject({ iconId: 'arrow_import', source: 'preset' })
+    expect(resolveIcon(target('settings.section:better-sidebar'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
+      .toMatchObject({ iconId: 'panel_right_gallery', source: 'preset' })
+  })
+
+  it('preserves trusted custom icons for third-party settings', () => {
+    expect(resolveIcon(target('settings.section:antigravity-auth'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
+      .toMatchObject({ iconId: null, source: 'original' })
+    expect(resolveIcon(target('settings.section:market'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
+      .toMatchObject({ iconId: null, source: 'original' })
+    expect(resolveIcon(target('settings.section:chat-import'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
+      .toMatchObject({ iconId: null, source: 'original' })
   })
 
   it('replaces a generic original but preserves a non-generic original under replace-generic', () => {

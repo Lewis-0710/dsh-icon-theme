@@ -11,10 +11,23 @@ interface SettingsMatch {
 }
 
 /** Third-party markers that indicate a settings row already has a custom icon. */
-const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = [
+export const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = [
   'data-dsh-better-sidebar-settings-nav',
   'data-dsh-market-nav-icon',
+  'data-agy-nav-icon',
+  'data-dsh-chat-import-settings-nav',
+  'data-dsh-liquid-glass-settings-nav',
+  'data-dsh-service-nav',
 ] as const
+
+export function hasTrustedCustomIcon(button: Element): boolean {
+  if (TRUSTED_THIRD_PARTY_SETTINGS_MARKERS.some(marker => button.hasAttribute(marker))) return true
+  for (const attr of button.getAttributeNames()) {
+    if (attr.startsWith('data-dsh-icon-theme')) continue
+    if (attr.includes('nav-icon') || attr.includes('settings-nav')) return true
+  }
+  return false
+}
 
 function directSvg(element: Element): SVGElement | undefined {
   return Array.from(element.children).find(child => child.tagName.toLowerCase() === 'svg') as SVGElement | undefined
@@ -88,7 +101,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
     for (let index = 0; index < match.targets.length; index += 1) {
       const target = match.targets[index]!
       const button = match.buttons[index]!
-      const hasTrustedThirdPartyIcon = TRUSTED_THIRD_PARTY_SETTINGS_MARKERS.some(marker => button.hasAttribute(marker))
+      const hasTrustedThirdPartyIcon = hasTrustedCustomIcon(button)
       const resolution = options.resolve(target, {
         hasOriginal: true,
         originalIsGeneric: !NATIVE_SETTINGS_IDS.has(target.id) && !hasTrustedThirdPartyIcon,

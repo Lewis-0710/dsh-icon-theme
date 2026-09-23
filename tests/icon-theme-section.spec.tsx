@@ -30,7 +30,7 @@ function harness(sidebarEntries: Array<{ options: { id: string; order?: number; 
   const slots: SlotLedgerLike = {
     entriesOfSlot: name => name === 'settings.section'
       ? [
-          { options: { id: 'market', order: 40, label: '插件市场' } },
+          { options: { id: 'icon-theme', order: 40, label: '图标主题' } },
           { options: { id: 'unknown-feature', order: 50, label: '神秘功能' } },
         ]
       : sidebarEntries,
@@ -46,14 +46,14 @@ describe('IconThemeSection', () => {
   it('selects and resets a manual override with a live source update', async () => {
     const { scope, store } = harness()
     render(<IconThemeSection store={store} t={t} />)
-    const row = screen.getByText('插件市场').closest('[data-target-key]') as HTMLElement
+    const row = screen.getByText('图标主题').closest('[data-target-key]') as HTMLElement
     fireEvent.click(within(row).getByRole('button', { name: '更改' }))
     expect(screen.getAllByText('官方').length).toBeGreaterThan(0)
     const appsButton = screen.getAllByRole('button', { name: '插件' })
       .find(button => button.querySelector('[data-icon-id="apps"]'))!
     fireEvent.click(appsButton)
     await waitFor(() => expect(scope.writes).toEqual([
-      ['overrides', { 'settings.section:market': 'apps' }],
+      ['overrides', { 'settings.section:icon-theme': 'apps' }],
     ]))
     expect(within(row).getByText('手动')).toBeTruthy()
     fireEvent.click(within(row).getByRole('button', { name: '恢复自动' }))
@@ -90,7 +90,7 @@ describe('IconThemeSection', () => {
   it('does not show the keep-original hint for non-original resolutions', () => {
     const { store } = harness()
     render(<IconThemeSection store={store} t={t} />)
-    const row = screen.getByText('插件市场').closest('[data-target-key]') as HTMLElement
+    const row = screen.getByText('图标主题').closest('[data-target-key]') as HTMLElement
     expect(row.querySelector('.dit-preview-hint')).toBeNull()
     store.dispose()
   })
@@ -101,7 +101,7 @@ describe('IconThemeSection', () => {
     render(<IconThemeSection store={store} t={t} />)
     fireEvent.click(screen.getByRole('button', { name: '未识别' }))
     expect(screen.getByText('神秘功能')).toBeTruthy()
-    expect(screen.queryByText('插件市场')).toBeNull()
+    expect(screen.queryByText('图标主题')).toBeNull()
     store.dispose()
   })
 
@@ -146,7 +146,7 @@ describe('IconThemeSection', () => {
   it('renders English icon labels and resolution reasons in the English locale', () => {
     const { store } = harness()
     render(<IconThemeSection store={store} t={tEn} />)
-    const row = screen.getByText('插件市场').closest('[data-target-key]') as HTMLElement
+    const row = screen.getByText('图标主题').closest('[data-target-key]') as HTMLElement
     expect(row.querySelector('.dit-source')?.getAttribute('title')).toBe('Audited bundled plugin icon')
     fireEvent.click(within(row).getByRole('button', { name: 'Change' }))
     expect(screen.getByRole('button', { name: 'Apps' })).toBeTruthy()
