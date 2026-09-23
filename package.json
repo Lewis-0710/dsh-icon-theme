@@ -15,7 +15,7 @@
     "theme"
   ],
   "scripts": {
-    "icons:generate": "node scripts/generate-icons.mjs",
+    "icons:generate": "node scripts/generate-icons.mjs && node scripts/generate-official-icons.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.client.json --noEmit",
     "build:host": "tsc -p tsconfig.json",
     "build:client": "npm run icons:generate && tsdown && node scripts/normalize-client-banner.mjs",

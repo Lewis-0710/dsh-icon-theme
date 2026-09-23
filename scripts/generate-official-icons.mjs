@@ -8,20 +8,27 @@
  * The emitted catalog is embedded into the client bundle so the published
  * package has zero runtime dependency on the primitives package.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = dirname(fileURLToPath(import.meta.url))
-const defaultPrimitives = join(root, '..', 'node_modules', '@deepseek-ai', 'dsh-client-ui-primitives', 'lib', 'index.js')
+const desktopPrimitives = '/Applications/DSH Desktop.app/Contents/Resources/app/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js'
+const globalPrimitives = '/Users/lewis/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js'
+const defaultPrimitives = existsSync(desktopPrimitives)
+  ? desktopPrimitives
+  : existsSync(globalPrimitives)
+    ? globalPrimitives
+    : join(root, '..', 'node_modules', '@deepseek-ai', 'dsh-client-ui-primitives', 'lib', 'index.js')
 const primitivesPath = process.argv[2] ?? defaultPrimitives
 
 const ICON_EXPORTS = [
-  "IconAgentPresetOutline16","IconApiOutline14","IconArchiveOutline20","IconBranchOutline16","IconBrowseOutline16","IconCheckOutline14","IconCheckOutline16","IconChecklistOutline14","IconChevronDownOutline14","IconChevronLeftOutline14","IconChevronRightOutline14","IconChevronUpOutline14","IconCloseFill14","IconCloseOutline16","IconCodeOutline16","IconCopyOutline16","IconCordisPluginOutline14","IconDarkOutline16","IconDataOutline16","IconDislikeFill16","IconDislikeOutline16","IconDownloadOutline16","IconEditOutline16","IconEllipsisOutline16","IconEnhanceOutline16","IconFolderClose16","IconFolderOpen16","IconFolderOpenOutline16","IconFollowsystemOutline16","IconFullscreenOutline16","IconGlobeOutline14","IconGoalOutline16","IconInspectOutline12","IconLightOutline16","IconLikeFill16","IconLikeOutline16","IconLinkOutline14","IconLinkOutline16","IconListPenOutline16","IconLoadingOutline16","IconNewChatOutline16","IconPanelLeftOutline16","IconPaperclipOutline16","IconPauseOutline16","IconPersonalizationOutline16","IconPlayOutline16","IconPlusOutline16","IconProjectAddOutline16","IconQuestionOutline14","IconQueueOutline14","IconRefreshOutline14","IconRefreshOutline16","IconRightUpOutline14","IconRightUpOutline16","IconSearchOutline16","IconSendOutline14","IconSendOutline16","IconSettingsOutline14","IconSettingsOutline16","IconShareOutline16","IconSkillOutline16","IconSparkle16","IconStopFill16","IconThinkOutline14","IconThinkOutline16","IconTrashOutline16","IconTreeCorner8x10","IconTriangleRightFill14","IconUserOutline16","IconWarningOutline16",
+  "IconAgentPresetOutline16","IconAlarmClockOutline16","IconApiOutline14","IconArchiveOutline20","IconBranchOutline16","IconBrowseOutline16","IconCheckOutline14","IconCheckOutline16","IconChecklistOutline14","IconChevronDownOutline14","IconChevronLeftOutline14","IconChevronRightOutline14","IconChevronUpOutline14","IconClockOutline16","IconCloseFill14","IconCloseOutline16","IconCodeOutline16","IconContextInjectionOutline16","IconCopyOutline16","IconCordisPluginOutline14","IconDarkOutline16","IconDataOutline16","IconDatabaseOutline16","IconDislikeFill16","IconDislikeOutline16","IconDownloadOutline16","IconEditOutline16","IconEllipsisOutline16","IconEnhanceOutline16","IconFolderClose16","IconFolderOpen16","IconFolderOpenOutline16","IconFollowsystemOutline16","IconFullscreenOutline16","IconGaugeOutline16","IconGlobeOutline14","IconGoalOutline16","IconInspectOutline12","IconLightOutline16","IconLikeFill16","IconLikeOutline16","IconLinkOutline14","IconLinkOutline16","IconListPenOutline16","IconLoadingOutline16","IconNewChatOutline16","IconPanelLeftOutline16","IconPaperclipOutline16","IconPauseOutline16","IconPersonalizationOutline16","IconPlayOutline16","IconPlusOutline16","IconProjectAddOutline16","IconQuestionOutline14","IconQueueOutline14","IconRefreshOutline14","IconRefreshOutline16","IconRightUpOutline14","IconRightUpOutline16","IconSearchOutline16","IconSendOutline14","IconSendOutline16","IconSettingsOutline14","IconSettingsOutline16","IconShareOutline16","IconSkillOutline16","IconSparkle16","IconStopFill16","IconThinkOutline14","IconThinkOutline16","IconTrashOutline16","IconTreeCorner8x10","IconTriangleRightFill14","IconUserOutline16","IconWarningOutline16",
 ]
 
 const ZH_LABELS = {
   IconAgentPresetOutline16: '智能体预设',
+  IconAlarmClockOutline16: '闹钟',
   IconApiOutline14: 'API',
   IconArchiveOutline20: '归档',
   IconBranchOutline16: '分支',
@@ -33,13 +40,16 @@ const ZH_LABELS = {
   IconChevronLeftOutline14: '向左',
   IconChevronRightOutline14: '向右',
   IconChevronUpOutline14: '向上',
+  IconClockOutline16: '时钟',
   IconCloseFill14: '关闭',
   IconCloseOutline16: '关闭',
   IconCodeOutline16: '代码',
+  IconContextInjectionOutline16: '上下文注入',
   IconCopyOutline16: '复制',
   IconCordisPluginOutline14: '插件',
   IconDarkOutline16: '月亮',
   IconDataOutline16: '数据',
+  IconDatabaseOutline16: '数据库',
   IconDislikeFill16: '不喜欢',
   IconDislikeOutline16: '不喜欢',
   IconDownloadOutline16: '下载',
@@ -51,6 +61,7 @@ const ZH_LABELS = {
   IconFolderOpenOutline16: '文件夹（打开·描线）',
   IconFollowsystemOutline16: '跟随系统',
   IconFullscreenOutline16: '全屏',
+  IconGaugeOutline16: '仪表',
   IconGlobeOutline14: '地球',
   IconGoalOutline16: '目标',
   IconInspectOutline12: '检查',

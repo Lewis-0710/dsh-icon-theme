@@ -22,7 +22,7 @@ const generatedCount = (generated.match(/^  "[^"]+":/gm) ?? []).length
 if (generatedCount !== 50) throw new Error(`expected 50 generated Fluent icons, found ${generatedCount}`)
 const officialGenerated = fs.readFileSync(officialGeneratedFile, 'utf8')
 const officialGeneratedCount = (officialGenerated.match(/^    id: /gm) ?? []).length
-if (officialGeneratedCount !== 70) throw new Error(`expected 70 generated official DSH icons, found ${officialGeneratedCount}`)
+if (officialGeneratedCount !== 75) throw new Error(`expected 75 generated official DSH icons, found ${officialGeneratedCount}`)
 
 for (const requiredFile of ['cordis.patch.yml', 'README.md', 'README.zh.md', 'THIRD_PARTY_NOTICES.md', 'LICENSE']) {
   if (!fs.existsSync(requiredFile)) throw new Error(`missing package file: ${requiredFile}`)

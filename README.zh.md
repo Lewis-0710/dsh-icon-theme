@@ -1,3 +1,15 @@
+> [!NOTE]
+> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
+>
+> **与上游差异**：
+> 1. **脱离主题单选互斥**：包名与 Cordis 插件名变更为 `dsh-icon-theme-custom`，避免命中 `dshmarket` 线上注册表的 `theme` 分类互斥逻辑（`activateTheme`），使图标插件能与 `dsh-theme-liquid-glass` 等纯主题插件无冲突共存。
+> 2. **内置矢量图标升级为最新官方形态**：
+>    - 插件市场（`plugin.market`）内置图标升级为 DSH 最新官方带右上角倾斜悬浮积木的矢量设计，替换旧版呆板九宫格形态。
+>    - DSH 官方 UI 原语图标升级至 75 个（同步自 DSH 宿主 `0.1.5-rc.2`），包含新版闹钟、时钟、上下文注入、数据库、仪表等，内置图标总数扩充至 126 个。
+> 3. **默认图标定制**：自身设置菜单（`settings.section:icon-theme`）预设图标配置为 DSH 自带的“图像”图标（`image`），在默认策略下即刻生效。
+>
+> 详见 [sync.patch](./sync.patch)。
+
 # dsh-icon-theme
 
 [English](README.md) | 简体中文
@@ -12,7 +24,7 @@ DSH 0.1.x 的设置贡献提供稳定 ID 和名称，但尚未提供图标字段
 
 - 通用识别实时生效且经过优先级遮蔽后的 `settings.section` 和 `sidebar.footer.action`；只有侧边栏部分渲染、无法按顺序对应时，才使用经过审核的插件兼容记录。
 - 用 `settings.section:market` 这样的稳定键保存选择，不依赖中文、英文或 DOM 顺序。
-- 内置 50 个 Fluent UI 16 Regular 图标、70 个 DSH 官方 UI 图标，以及经过审核的 dsh-market 单色原图标（共 121 个）。
+- 内置 50 个 Fluent UI 16 Regular 图标、75 个 DSH 官方 UI 图标，以及经过审核的 dsh-market 单色原图标（共 126 个）。
 - 运行时不请求图标 CDN、Iconify、GitHub、webfont，也不扫描其他插件包。
 - 卸载或热重载时完整恢复宿主 SVG 和插件添加的 DOM 标记。
 - 明确区分“当前未渲染”和“非图标卡片”，不会假装已经更改成功。

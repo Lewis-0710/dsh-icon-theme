@@ -6,7 +6,7 @@ picker, so users can choose those glyphs without any extra install.
 
 ## What was added
 
-- 70 official icons, exposed in the picker under the `dsh.*` ids
+- 75 official icons, exposed in the picker under the `dsh.*` ids
   (search `dsh`, `official`, or `官方` to filter them).
 - Icons are static inline SVG strings generated from the primitives package;
   no runtime dependency on the package is needed.
@@ -21,7 +21,7 @@ picker, so users can choose those glyphs without any extra install.
 
 ## Icon ids
 
-All 70 component exports from the primitives package are included, e.g.:
+All 75 component exports from the primitives package are included, e.g.:
 
 - `dsh.light-outline16` — line-art sun
 - `dsh.dark-outline16` — moon

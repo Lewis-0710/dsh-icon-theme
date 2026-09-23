@@ -3,6 +3,10 @@
 >
 > **与上游差异**：
 > 1. **脱离主题单选互斥**：包名与 Cordis 插件名变更为 `dsh-icon-theme-custom`，避免命中 `dshmarket` 线上注册表的 `theme` 分类互斥逻辑（`activateTheme`），使图标插件能与 `dsh-theme-liquid-glass` 等纯主题插件无冲突共存。
+> 2. **内置矢量图标升级为最新官方形态**：
+>    - 插件市场（`plugin.market`）内置图标升级为 DSH 最新官方带右上角倾斜悬浮积木的矢量设计，替换旧版呆板九宫格形态。
+>    - DSH 官方 UI 原语图标升级至 75 个（同步自 DSH 宿主 `0.1.5-rc.2`），包含新版闹钟、时钟、上下文注入、数据库、仪表等，内置图标总数扩充至 126 个。
+> 3. **默认图标定制**：自身设置菜单（`settings.section:icon-theme`）预设图标配置为 DSH 自带的“图像”图标（`image`），在默认策略下即刻生效。
 >
 > 详见 [sync.patch](./sync.patch)。
 
@@ -22,7 +26,7 @@ DSH 0.1.x settings contributions expose stable IDs and labels, but not an icon f
 
 - Discovers live winning `settings.section` and `sidebar.footer.action` contributions generically. Audited per-plugin records are used only when a sidebar is partially rendered and cannot be correlated by order.
 - Stores choices by stable key, such as `settings.section:market`, never by translated labels or DOM position.
-- Ships 50 curated Fluent UI 16 Regular glyphs, 70 official DSH UI glyphs, and the audited monochrome dsh-market glyph (121 total).
+- Ships 50 curated Fluent UI 16 Regular glyphs, 75 official DSH UI glyphs, and the audited monochrome dsh-market glyph (126 total).
 - Uses no icon CDN, webfont, Iconify API, GitHub request, or package scanning at runtime.
 - Restores every host SVG and owned DOM marker on unload or hot reload.
 - Reports non-rendered contributions and non-icon cards instead of pretending they were changed.
