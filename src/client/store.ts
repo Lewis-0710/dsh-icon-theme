@@ -36,7 +36,7 @@ export interface IconThemeSnapshot {
 
 const CLIENT_DEFAULT_CONFIG: IconThemeConfig = {
   overrides: {},
-  originalPolicy: 'prefer',
+  originalPolicy: 'replace-generic',
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -50,7 +50,7 @@ export function normalizeClientConfig(value: unknown): IconThemeConfig {
     : {}
   return {
     overrides,
-    originalPolicy: value.originalPolicy === 'replace-generic' ? 'replace-generic' : 'prefer',
+    originalPolicy: value.originalPolicy === 'prefer' ? 'prefer' : 'replace-generic',
   }
 }
 

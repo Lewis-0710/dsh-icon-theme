@@ -40,8 +40,17 @@ describe('resolveIcon', () => {
   })
 
   it('preserves a generic original under the prefer policy', () => {
-    expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
+    expect(resolveIcon(target('settings.section:notification'), { ...DEFAULT_CONFIG, originalPolicy: 'prefer' }, { hasOriginal: true, originalIsGeneric: true }))
       .toMatchObject({ iconId: null, source: 'original' })
+  })
+
+  it('replaces a generic original by default under replace-generic policy', () => {
+    expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
+      .toMatchObject({ iconId: 'alert', source: 'preset' })
+    expect(resolveIcon(target('settings.section:antigravity-auth'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
+      .toMatchObject({ iconId: 'dsh.sparkle16', source: 'preset' })
+    expect(resolveIcon(target('settings.section:chat-import'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
+      .toMatchObject({ iconId: 'arrow_import', source: 'preset' })
   })
 
   it('replaces a generic original but preserves a non-generic original under replace-generic', () => {

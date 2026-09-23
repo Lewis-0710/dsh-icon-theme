@@ -7,7 +7,7 @@ export interface IconThemeConfig {
 
 export const DEFAULT_CONFIG: Readonly<IconThemeConfig> = Object.freeze({
   overrides: Object.freeze({}),
-  originalPolicy: 'prefer',
+  originalPolicy: 'replace-generic',
 })
 
 export const Config: Schema<any, IconThemeConfig> = Schema.object({

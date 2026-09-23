@@ -69,10 +69,10 @@ describe('IconThemeSection', () => {
     const replace = screen.getByRole('button', { name: '替换通用回退图标' })
     expect(prefer.textContent).toBe('保留原图标')
     expect(replace.textContent).toBe('替换回退')
-    expect(prefer.getAttribute('aria-pressed')).toBe('true')
-    fireEvent.click(replace)
-    await waitFor(() => expect(scope.writes).toContainEqual(['originalPolicy', 'replace-generic']))
     expect(replace.getAttribute('aria-pressed')).toBe('true')
+    fireEvent.click(prefer)
+    await waitFor(() => expect(scope.writes).toContainEqual(['originalPolicy', 'prefer']))
+    expect(prefer.getAttribute('aria-pressed')).toBe('true')
     store.dispose()
   })
 
@@ -151,6 +151,30 @@ describe('IconThemeSection', () => {
     fireEvent.click(within(row).getByRole('button', { name: 'Change' }))
     expect(screen.getByRole('button', { name: 'Apps' })).toBeTruthy()
     expect(screen.queryByRole('button', { name: '插件' })).toBeNull()
+    store.dispose()
+  })
+
+  it('renders official native icons instead of generic gears for native settings sections', () => {
+    const scope = {
+      value: { originalPolicy: 'prefer', overrides: {} },
+      writes: [],
+      getSnapshot() { return { status: 'ready', value: this.value, writable: true } },
+      subscribe() { return () => {} },
+      async set() {},
+      async unset() {},
+    }
+    const slots: SlotLedgerLike = {
+      entriesOfSlot: name => name === 'settings.section'
+        ? [{ options: { id: 'agent-presets', order: 20, label: 'Agent 预设' } }]
+        : [],
+      subscribe: () => () => {},
+    }
+    const store = createIconThemeStore(scope as any, slots)
+    render(<IconThemeSection store={store} t={t} />)
+    const agentRow = screen.getByText('Agent 预设').closest('[data-target-key]') as HTMLElement
+    const agentPreview = agentRow.querySelector('.dit-preview') as HTMLElement
+    expect(agentPreview.querySelector('[data-icon-id="dsh.agent-preset-outline16"]')).toBeTruthy()
+    expect(agentPreview.querySelector('[data-icon-id="settings"]')).toBeNull()
     store.dispose()
   })
 })
