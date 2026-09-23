@@ -1,8 +1,8 @@
 diff --git a/README.md b/README.md
-index 04a8297..661a24e 100644
+index 04a8297..f5ecf8b 100644
 --- a/README.md
 +++ b/README.md
-@@ -1,3 +1,16 @@
+@@ -1,3 +1,19 @@
 +> [!NOTE]
 +> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
 +>
@@ -12,14 +12,17 @@ index 04a8297..661a24e 100644
 +>    - 插件市场（`plugin.market`）内置图标升级为 DSH 最新官方带右上角倾斜悬浮积木的矢量设计，替换旧版呆板九宫格形态。
 +>    - DSH 官方 UI 原语图标升级至 75 个（同步自 DSH 宿主 `0.1.5-rc.2`），包含新版闹钟、时钟、上下文注入、数据库、仪表等，内置图标总数扩充至 126 个。
 +> 3. **默认图标定制**：自身设置菜单（`settings.section:icon-theme`）预设图标配置为 DSH 自带的“图像”图标（`image`），在默认策略下即刻生效。
-+> 4. **自动替换通用回退齿轮与真实原图标呈现**：默认策略优化为 `replace-generic`，避免宿主占位齿轮阻塞自动分配；扩充了 Antigravity、会话导入、服务控制、液态玻璃、桌面设置等项的预设；修复图标设置列表中原生专有图标展示（智能体预设、模型、桌面等真实呈现官方原生图标，不再全部画成齿轮）。
++> 4. **第三方插件专属图标保护与真实原图标呈现**：
++>    - **精准识别第三方专有图标**：通过扩展识别专属 DOM 标记（`data-agy-nav-icon`、`data-dsh-chat-import-settings-nav`、`data-dsh-liquid-glass-settings-nav`、`data-dsh-service-nav`、`data-dsh-market-nav-icon` 等），放行第三方插件自绘的高清专属图标（如 Antigravity 官方 A、会话导入托盘、服务控制机架、液态玻璃水滴、插件市场悬浮积木等），严禁篡改与错误覆盖。
++>    - **专有原图标优先保护**：在图标解析流水线中将专有原图标（`hasOriginal && !originalIsGeneric`）提升至预设之前，确保各插件官方原汁原味的原生专属设计完好无损。
++>    - **真实原图标呈现**：修复图标设置列表中原生/专有图标展示（模型、桌面、桌面通知等真实呈现官方原生图标，不再全部画成齿轮）。
 +>
 +> 详见 [sync.patch](./sync.patch)。
 +
  # dsh-icon-theme
  
  English | [简体中文](README.zh.md)
-@@ -14,7 +27,7 @@ DSH 0.1.x settings contributions expose stable IDs and labels, but not an icon f
+@@ -14,7 +30,7 @@ DSH 0.1.x settings contributions expose stable IDs and labels, but not an icon f
  
  - Discovers live winning `settings.section` and `sidebar.footer.action` contributions generically. Audited per-plugin records are used only when a sidebar is partially rendered and cannot be correlated by order.
  - Stores choices by stable key, such as `settings.section:market`, never by translated labels or DOM position.
@@ -29,10 +32,10 @@ index 04a8297..661a24e 100644
  - Restores every host SVG and owned DOM marker on unload or hot reload.
  - Reports non-rendered contributions and non-icon cards instead of pretending they were changed.
 diff --git a/README.zh.md b/README.zh.md
-index bf30fad..c333061 100644
+index bf30fad..60f74c1 100644
 --- a/README.zh.md
 +++ b/README.zh.md
-@@ -1,3 +1,16 @@
+@@ -1,3 +1,19 @@
 +> [!NOTE]
 +> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
 +>
@@ -42,14 +45,17 @@ index bf30fad..c333061 100644
 +>    - 插件市场（`plugin.market`）内置图标升级为 DSH 最新官方带右上角倾斜悬浮积木的矢量设计，替换旧版呆板九宫格形态。
 +>    - DSH 官方 UI 原语图标升级至 75 个（同步自 DSH 宿主 `0.1.5-rc.2`），包含新版闹钟、时钟、上下文注入、数据库、仪表等，内置图标总数扩充至 126 个。
 +> 3. **默认图标定制**：自身设置菜单（`settings.section:icon-theme`）预设图标配置为 DSH 自带的“图像”图标（`image`），在默认策略下即刻生效。
-+> 4. **自动替换通用回退齿轮与真实原图标呈现**：默认策略优化为 `replace-generic`，避免宿主占位齿轮阻塞自动分配；扩充了 Antigravity、会话导入、服务控制、液态玻璃、桌面设置等项的预设；修复图标设置列表中原生专有图标展示（智能体预设、模型、桌面等真实呈现官方原生图标，不再全部画成齿轮）。
++> 4. **第三方插件专属图标保护与真实原图标呈现**：
++>    - **精准识别第三方专有图标**：通过扩展识别专属 DOM 标记（`data-agy-nav-icon`、`data-dsh-chat-import-settings-nav`、`data-dsh-liquid-glass-settings-nav`、`data-dsh-service-nav`、`data-dsh-market-nav-icon` 等），放行第三方插件自绘的高清专属图标（如 Antigravity 官方 A、会话导入托盘、服务控制机架、液态玻璃水滴、插件市场悬浮积木等），严禁篡改与错误覆盖。
++>    - **专有原图标优先保护**：在图标解析流水线中将专有原图标（`hasOriginal && !originalIsGeneric`）提升至预设之前，确保各插件官方原汁原味的原生专属设计完好无损。
++>    - **真实原图标呈现**：修复图标设置列表中原生/专有图标展示（模型、桌面、桌面通知等真实呈现官方原生图标，不再全部画成齿轮）。
 +>
 +> 详见 [sync.patch](./sync.patch)。
 +
  # dsh-icon-theme
  
  [English](README.md) | 简体中文
-@@ -12,7 +25,7 @@ DSH 0.1.x 的设置贡献提供稳定 ID 和名称，但尚未提供图标字段
+@@ -12,7 +28,7 @@ DSH 0.1.x 的设置贡献提供稳定 ID 和名称，但尚未提供图标字段
  
  - 通用识别实时生效且经过优先级遮蔽后的 `settings.section` 和 `sidebar.footer.action`；只有侧边栏部分渲染、无法按顺序对应时，才使用经过审核的插件兼容记录。
  - 用 `settings.section:market` 这样的稳定键保存选择，不依赖中文、英文或 DOM 顺序。
@@ -225,22 +231,44 @@ index d30299b..c5534f3 100644
                </div>
                <div className="dit-name">
 diff --git a/src/client/dom/settings-adapter.ts b/src/client/dom/settings-adapter.ts
-index 93faa88..331829f 100644
+index 93faa88..3a8076b 100644
 --- a/src/client/dom/settings-adapter.ts
 +++ b/src/client/dom/settings-adapter.ts
-@@ -11,7 +11,10 @@ interface SettingsMatch {
+@@ -11,7 +11,23 @@ interface SettingsMatch {
  }
  
  /** Third-party markers that indicate a settings row already has a custom icon. */
 -const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = ['data-dsh-better-sidebar-settings-nav'] as const
-+const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = [
++export const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = [
 +  'data-dsh-better-sidebar-settings-nav',
 +  'data-dsh-market-nav-icon',
++  'data-agy-nav-icon',
++  'data-dsh-chat-import-settings-nav',
++  'data-dsh-liquid-glass-settings-nav',
++  'data-dsh-service-nav',
 +] as const
++
++export function hasTrustedCustomIcon(button: Element): boolean {
++  if (TRUSTED_THIRD_PARTY_SETTINGS_MARKERS.some(marker => button.hasAttribute(marker))) return true
++  for (const attr of button.getAttributeNames()) {
++    if (attr.startsWith('data-dsh-icon-theme')) continue
++    if (attr.includes('nav-icon') || attr.includes('settings-nav')) return true
++  }
++  return false
++}
  
  function directSvg(element: Element): SVGElement | undefined {
    return Array.from(element.children).find(child => child.tagName.toLowerCase() === 'svg') as SVGElement | undefined
-@@ -130,7 +133,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
+@@ -85,7 +101,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
+     for (let index = 0; index < match.targets.length; index += 1) {
+       const target = match.targets[index]!
+       const button = match.buttons[index]!
+-      const hasTrustedThirdPartyIcon = TRUSTED_THIRD_PARTY_SETTINGS_MARKERS.some(marker => button.hasAttribute(marker))
++      const hasTrustedThirdPartyIcon = hasTrustedCustomIcon(button)
+       const resolution = options.resolve(target, {
+         hasOriginal: true,
+         originalIsGeneric: !NATIVE_SETTINGS_IDS.has(target.id) && !hasTrustedThirdPartyIcon,
+@@ -130,7 +146,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
      childList: true,
      subtree: true,
      attributes: true,
@@ -370,12 +398,12 @@ index 1551adc..5c9ada8 100644
  
  export function apply(ctx: IconThemeClientContext): void {
 diff --git a/src/client/presets.ts b/src/client/presets.ts
-index 6a94734..c82bae7 100644
+index 6a94734..3b36be7 100644
 --- a/src/client/presets.ts
 +++ b/src/client/presets.ts
-@@ -1,25 +1,40 @@
+@@ -1,25 +1,33 @@
  export const CURATED_PLUGIN_ICONS: Readonly<Record<string, string>> = Object.freeze({
-   'settings.section:market': 'plugin.market',
+-  'settings.section:market': 'plugin.market',
 +  'settings.section:icon-theme': 'image',
  })
  
@@ -395,12 +423,6 @@ index 6a94734..c82bae7 100644
    'settings.section:better-sidebar': 'panel_right_gallery',
 -  'settings.section:icon-theme': 'color',
 +  'settings.section:icon-theme': 'image',
-+  'settings.section:antigravity-auth': 'dsh.sparkle16',
-+  'settings.section:chat-import': 'arrow_import',
-+  'settings.section:dsh-service': 'dsh.gauge-outline16',
-+  'settings.section:liquid-glass': 'eye',
-+  'settings.section:desktop': 'desktop',
-+  'settings.section:language-control': 'dsh.code-outline16',
    'sidebar.footer.action:chat-import': 'arrow_import',
    'sidebar.footer.action:usage-stats': 'chart_multiple',
    'sidebar.footer.action:bookmarks': 'bookmark',
@@ -419,22 +441,28 @@ index 6a94734..c82bae7 100644
  
  const INFERENCE_RULES: ReadonlyArray<{ iconId: string; tokens: readonly string[] }> = [
    { iconId: 'store_microsoft', tokens: ['market', 'store', 'marketplace'] },
-@@ -31,9 +46,14 @@ const INFERENCE_RULES: ReadonlyArray<{ iconId: string; tokens: readonly string[]
-   { iconId: 'bookmark', tokens: ['bookmark', 'favorite'] },
-   { iconId: 'document_pdf', tokens: ['pdf', 'mineru', 'ocr'] },
-   { iconId: 'shield_lock', tokens: ['security', 'aegis', 'guard', 'permission'] },
--  { iconId: 'eye', tokens: ['vision', 'visual', 'image'] },
-+  { iconId: 'eye', tokens: ['vision', 'visual', 'image', 'glass', 'liquid'] },
-   { iconId: 'panel_right_gallery', tokens: ['sidebar', 'side-card', 'panel'] },
-   { iconId: 'apps', tokens: ['plugin', 'extension'] },
-+  { iconId: 'dsh.sparkle16', tokens: ['antigravity', 'sparkle', 'ai', 'magic'] },
-+  { iconId: 'arrow_import', tokens: ['import'] },
-+  { iconId: 'dsh.gauge-outline16', tokens: ['service', 'gauge', 'daemon'] },
-+  { iconId: 'desktop', tokens: ['desktop'] },
-+  { iconId: 'dsh.code-outline16', tokens: ['language', 'code'] },
- ]
+diff --git a/src/client/resolve.ts b/src/client/resolve.ts
+index fb4a9ae..2b86232 100644
+--- a/src/client/resolve.ts
++++ b/src/client/resolve.ts
+@@ -12,12 +12,16 @@ export function resolveIcon(
+     return { iconId: manual, source: 'manual', reason: 'reasonManual' }
+   }
  
- export function inferIcon(id: string): string | null {
++  if (evidence.hasOriginal && !evidence.originalIsGeneric) {
++    return { iconId: null, source: 'original', reason: 'reasonOriginal' }
++  }
++
+   const plugin = CURATED_PLUGIN_ICONS[target.key]
+   if (plugin && ICON_BY_ID.has(plugin)) {
+     return { iconId: plugin, source: 'plugin', reason: 'reasonPlugin' }
+   }
+ 
+-  if (evidence.hasOriginal && (config.originalPolicy === 'prefer' || !evidence.originalIsGeneric)) {
++  if (evidence.hasOriginal && config.originalPolicy === 'prefer') {
+     return { iconId: null, source: 'original', reason: 'reasonOriginal' }
+   }
+ 
 diff --git a/src/client/store.ts b/src/client/store.ts
 index 6e899f4..3cd04aa 100644
 --- a/src/client/store.ts
@@ -528,9 +556,35 @@ index cff748e..7575541 100644
      expect(calls).toHaveLength(1)
      expect(calls[0]?.[0]).toBe('dsh-icon-theme')
 diff --git a/tests/icon-theme-section.spec.tsx b/tests/icon-theme-section.spec.tsx
-index 6a4ecef..d169451 100644
+index 6a4ecef..edfa02a 100644
 --- a/tests/icon-theme-section.spec.tsx
 +++ b/tests/icon-theme-section.spec.tsx
+@@ -30,7 +30,7 @@ function harness(sidebarEntries: Array<{ options: { id: string; order?: number;
+   const slots: SlotLedgerLike = {
+     entriesOfSlot: name => name === 'settings.section'
+       ? [
+-          { options: { id: 'market', order: 40, label: '插件市场' } },
++          { options: { id: 'icon-theme', order: 40, label: '图标主题' } },
+           { options: { id: 'unknown-feature', order: 50, label: '神秘功能' } },
+         ]
+       : sidebarEntries,
+@@ -46,14 +46,14 @@ describe('IconThemeSection', () => {
+   it('selects and resets a manual override with a live source update', async () => {
+     const { scope, store } = harness()
+     render(<IconThemeSection store={store} t={t} />)
+-    const row = screen.getByText('插件市场').closest('[data-target-key]') as HTMLElement
++    const row = screen.getByText('图标主题').closest('[data-target-key]') as HTMLElement
+     fireEvent.click(within(row).getByRole('button', { name: '更改' }))
+     expect(screen.getAllByText('官方').length).toBeGreaterThan(0)
+     const appsButton = screen.getAllByRole('button', { name: '插件' })
+       .find(button => button.querySelector('[data-icon-id="apps"]'))!
+     fireEvent.click(appsButton)
+     await waitFor(() => expect(scope.writes).toEqual([
+-      ['overrides', { 'settings.section:market': 'apps' }],
++      ['overrides', { 'settings.section:icon-theme': 'apps' }],
+     ]))
+     expect(within(row).getByText('手动')).toBeTruthy()
+     fireEvent.click(within(row).getByRole('button', { name: '恢复自动' }))
 @@ -69,10 +69,10 @@ describe('IconThemeSection', () => {
      const replace = screen.getByRole('button', { name: '替换通用回退图标' })
      expect(prefer.textContent).toBe('保留原图标')
@@ -545,7 +599,33 @@ index 6a4ecef..d169451 100644
      store.dispose()
    })
  
-@@ -153,4 +153,28 @@ describe('IconThemeSection', () => {
+@@ -90,7 +90,7 @@ describe('IconThemeSection', () => {
+   it('does not show the keep-original hint for non-original resolutions', () => {
+     const { store } = harness()
+     render(<IconThemeSection store={store} t={t} />)
+-    const row = screen.getByText('插件市场').closest('[data-target-key]') as HTMLElement
++    const row = screen.getByText('图标主题').closest('[data-target-key]') as HTMLElement
+     expect(row.querySelector('.dit-preview-hint')).toBeNull()
+     store.dispose()
+   })
+@@ -101,7 +101,7 @@ describe('IconThemeSection', () => {
+     render(<IconThemeSection store={store} t={t} />)
+     fireEvent.click(screen.getByRole('button', { name: '未识别' }))
+     expect(screen.getByText('神秘功能')).toBeTruthy()
+-    expect(screen.queryByText('插件市场')).toBeNull()
++    expect(screen.queryByText('图标主题')).toBeNull()
+     store.dispose()
+   })
+ 
+@@ -146,11 +146,35 @@ describe('IconThemeSection', () => {
+   it('renders English icon labels and resolution reasons in the English locale', () => {
+     const { store } = harness()
+     render(<IconThemeSection store={store} t={tEn} />)
+-    const row = screen.getByText('插件市场').closest('[data-target-key]') as HTMLElement
++    const row = screen.getByText('图标主题').closest('[data-target-key]') as HTMLElement
+     expect(row.querySelector('.dit-source')?.getAttribute('title')).toBe('Audited bundled plugin icon')
+     fireEvent.click(within(row).getByRole('button', { name: 'Change' }))
+     expect(screen.getByRole('button', { name: 'Apps' })).toBeTruthy()
      expect(screen.queryByRole('button', { name: '插件' })).toBeNull()
      store.dispose()
    })
@@ -575,18 +655,19 @@ index 6a4ecef..d169451 100644
 +  })
  })
 diff --git a/tests/resolve.spec.ts b/tests/resolve.spec.ts
-index 7b87be7..55f7877 100644
+index 7b87be7..11f0495 100644
 --- a/tests/resolve.spec.ts
 +++ b/tests/resolve.spec.ts
-@@ -13,6 +13,7 @@ function target(key: TargetKey): DetectedTarget {
+@@ -12,7 +12,7 @@ function target(key: TargetKey): DetectedTarget {
+ 
  describe('resolveIcon', () => {
    it.each([
-     ['settings.section:market', 'plugin.market', 'plugin'],
+-    ['settings.section:market', 'plugin.market', 'plugin'],
 +    ['settings.section:icon-theme', 'image', 'plugin'],
      ['settings.section:notification', 'alert', 'preset'],
      ['settings.section:unfamiliar-folder-tool', 'folder', 'inferred'],
    ] as const)('%s resolves to %s', (key, iconId, source) => {
-@@ -20,6 +21,12 @@ describe('resolveIcon', () => {
+@@ -20,8 +20,14 @@ describe('resolveIcon', () => {
        .toMatchObject({ iconId, source, reason: source === 'plugin' ? 'reasonPlugin' : source === 'preset' ? 'reasonPreset' : 'reasonInferred' })
    })
  
@@ -597,29 +678,35 @@ index 7b87be7..55f7877 100644
 +  })
 +
    it('manual overrides win over curated plugin icons', () => {
-     const key = 'settings.section:market' as const
+-    const key = 'settings.section:market' as const
++    const key = 'settings.section:icon-theme' as const
      expect(resolveIcon(target(key), { ...DEFAULT_CONFIG, overrides: { [key]: 'apps' } }, { hasOriginal: true, originalIsGeneric: true }))
-@@ -33,10 +40,19 @@ describe('resolveIcon', () => {
+       .toMatchObject({ iconId: 'apps', source: 'manual' })
+   })
+@@ -33,7 +39,23 @@ describe('resolveIcon', () => {
    })
  
    it('preserves a generic original under the prefer policy', () => {
--    expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
 +    expect(resolveIcon(target('settings.section:notification'), { ...DEFAULT_CONFIG, originalPolicy: 'prefer' }, { hasOriginal: true, originalIsGeneric: true }))
++      .toMatchObject({ iconId: null, source: 'original' })
++  })
++
++  it('replaces a generic original by default under replace-generic policy', () => {
+     expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
++      .toMatchObject({ iconId: 'alert', source: 'preset' })
++    expect(resolveIcon(target('settings.section:better-sidebar'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
++      .toMatchObject({ iconId: 'panel_right_gallery', source: 'preset' })
++  })
++
++  it('preserves trusted custom icons for third-party settings', () => {
++    expect(resolveIcon(target('settings.section:antigravity-auth'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
++      .toMatchObject({ iconId: null, source: 'original' })
++    expect(resolveIcon(target('settings.section:market'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
++      .toMatchObject({ iconId: null, source: 'original' })
++    expect(resolveIcon(target('settings.section:chat-import'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: false }))
        .toMatchObject({ iconId: null, source: 'original' })
    })
  
-+  it('replaces a generic original by default under replace-generic policy', () => {
-+    expect(resolveIcon(target('settings.section:notification'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
-+      .toMatchObject({ iconId: 'alert', source: 'preset' })
-+    expect(resolveIcon(target('settings.section:antigravity-auth'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
-+      .toMatchObject({ iconId: 'dsh.sparkle16', source: 'preset' })
-+    expect(resolveIcon(target('settings.section:chat-import'), DEFAULT_CONFIG, { hasOriginal: true, originalIsGeneric: true }))
-+      .toMatchObject({ iconId: 'arrow_import', source: 'preset' })
-+  })
-+
-   it('replaces a generic original but preserves a non-generic original under replace-generic', () => {
-     expect(resolveIcon(target('settings.section:notification'), { ...DEFAULT_CONFIG, originalPolicy: 'replace-generic' }, { hasOriginal: true, originalIsGeneric: true }))
-       .toMatchObject({ iconId: 'alert', source: 'preset' })
 diff --git a/tests/settings-adapter.spec.ts b/tests/settings-adapter.spec.ts
 index 7d30ab1..461b1e2 100644
 --- a/tests/settings-adapter.spec.ts
