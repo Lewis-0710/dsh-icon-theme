@@ -1,19 +1,61 @@
 diff --git a/README.md b/README.md
-index 04a8297..9e765d9 100644
+index 04a8297..edbf3f6 100644
 --- a/README.md
 +++ b/README.md
-@@ -1,3 +1,11 @@
+@@ -1,3 +1,15 @@
 +> [!NOTE]
 +> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
 +>
 +> **与上游差异**：
 +> 1. **脱离主题单选互斥**：包名与 Cordis 插件名变更为 `dsh-icon-theme-custom`，避免命中 `dshmarket` 线上注册表的 `theme` 分类互斥逻辑（`activateTheme`），使图标插件能与 `dsh-theme-liquid-glass` 等纯主题插件无冲突共存。
++> 2. **内置矢量图标升级为最新官方形态**：
++>    - 插件市场（`plugin.market`）内置图标升级为 DSH 最新官方带右上角倾斜悬浮积木的矢量设计，替换旧版呆板九宫格形态。
++>    - DSH 官方 UI 原语图标升级至 75 个（同步自 DSH 宿主 `0.1.5-rc.2`），包含新版闹钟、时钟、上下文注入、数据库、仪表等，内置图标总数扩充至 126 个。
++> 3. **默认图标定制**：自身设置菜单（`settings.section:icon-theme`）预设图标配置为 DSH 自带的“图像”图标（`image`），在默认策略下即刻生效。
 +>
 +> 详见 [sync.patch](./sync.patch)。
 +
  # dsh-icon-theme
  
  English | [简体中文](README.zh.md)
+@@ -14,7 +26,7 @@ DSH 0.1.x settings contributions expose stable IDs and labels, but not an icon f
+ 
+ - Discovers live winning `settings.section` and `sidebar.footer.action` contributions generically. Audited per-plugin records are used only when a sidebar is partially rendered and cannot be correlated by order.
+ - Stores choices by stable key, such as `settings.section:market`, never by translated labels or DOM position.
+-- Ships 50 curated Fluent UI 16 Regular glyphs, 70 official DSH UI glyphs, and the audited monochrome dsh-market glyph (121 total).
++- Ships 50 curated Fluent UI 16 Regular glyphs, 75 official DSH UI glyphs, and the audited monochrome dsh-market glyph (126 total).
+ - Uses no icon CDN, webfont, Iconify API, GitHub request, or package scanning at runtime.
+ - Restores every host SVG and owned DOM marker on unload or hot reload.
+ - Reports non-rendered contributions and non-icon cards instead of pretending they were changed.
+diff --git a/README.zh.md b/README.zh.md
+index bf30fad..e67cbdc 100644
+--- a/README.zh.md
++++ b/README.zh.md
+@@ -1,3 +1,15 @@
++> [!NOTE]
++> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
++>
++> **与上游差异**：
++> 1. **脱离主题单选互斥**：包名与 Cordis 插件名变更为 `dsh-icon-theme-custom`，避免命中 `dshmarket` 线上注册表的 `theme` 分类互斥逻辑（`activateTheme`），使图标插件能与 `dsh-theme-liquid-glass` 等纯主题插件无冲突共存。
++> 2. **内置矢量图标升级为最新官方形态**：
++>    - 插件市场（`plugin.market`）内置图标升级为 DSH 最新官方带右上角倾斜悬浮积木的矢量设计，替换旧版呆板九宫格形态。
++>    - DSH 官方 UI 原语图标升级至 75 个（同步自 DSH 宿主 `0.1.5-rc.2`），包含新版闹钟、时钟、上下文注入、数据库、仪表等，内置图标总数扩充至 126 个。
++> 3. **默认图标定制**：自身设置菜单（`settings.section:icon-theme`）预设图标配置为 DSH 自带的“图像”图标（`image`），在默认策略下即刻生效。
++>
++> 详见 [sync.patch](./sync.patch)。
++
+ # dsh-icon-theme
+ 
+ [English](README.md) | 简体中文
+@@ -12,7 +24,7 @@ DSH 0.1.x 的设置贡献提供稳定 ID 和名称，但尚未提供图标字段
+ 
+ - 通用识别实时生效且经过优先级遮蔽后的 `settings.section` 和 `sidebar.footer.action`；只有侧边栏部分渲染、无法按顺序对应时，才使用经过审核的插件兼容记录。
+ - 用 `settings.section:market` 这样的稳定键保存选择，不依赖中文、英文或 DOM 顺序。
+-- 内置 50 个 Fluent UI 16 Regular 图标、70 个 DSH 官方 UI 图标，以及经过审核的 dsh-market 单色原图标（共 121 个）。
++- 内置 50 个 Fluent UI 16 Regular 图标、75 个 DSH 官方 UI 图标，以及经过审核的 dsh-market 单色原图标（共 126 个）。
+ - 运行时不请求图标 CDN、Iconify、GitHub、webfont，也不扫描其他插件包。
+ - 卸载或热重载时完整恢复宿主 SVG 和插件添加的 DOM 标记。
+ - 明确区分“当前未渲染”和“非图标卡片”，不会假装已经更改成功。
 diff --git a/cordis.patch.yml b/cordis.patch.yml
 index 1a321d4..9057e89 100644
 --- a/cordis.patch.yml
@@ -27,8 +69,30 @@ index 1a321d4..9057e89 100644
 +      name: dsh-icon-theme-custom
        # Keep an explicit composition layer for future pack/policy defaults.
        config: {}
+diff --git a/docs/OFFICIAL_ICONS.md b/docs/OFFICIAL_ICONS.md
+index 9520cfe..f4b20ce 100644
+--- a/docs/OFFICIAL_ICONS.md
++++ b/docs/OFFICIAL_ICONS.md
+@@ -6,7 +6,7 @@ picker, so users can choose those glyphs without any extra install.
+ 
+ ## What was added
+ 
+-- 70 official icons, exposed in the picker under the `dsh.*` ids
++- 75 official icons, exposed in the picker under the `dsh.*` ids
+   (search `dsh`, `official`, or `官方` to filter them).
+ - Icons are static inline SVG strings generated from the primitives package;
+   no runtime dependency on the package is needed.
+@@ -21,7 +21,7 @@ picker, so users can choose those glyphs without any extra install.
+ 
+ ## Icon ids
+ 
+-All 70 component exports from the primitives package are included, e.g.:
++All 75 component exports from the primitives package are included, e.g.:
+ 
+ - `dsh.light-outline16` — line-art sun
+ - `dsh.dark-outline16` — moon
 diff --git a/package.json b/package.json
-index b1b1cd4..19e57c2 100644
+index b1b1cd4..6d9ae9a 100644
 --- a/package.json
 +++ b/package.json
 @@ -1,5 +1,5 @@
@@ -38,6 +102,88 @@ index b1b1cd4..19e57c2 100644
    "version": "0.2.3",
    "description": "Auto-detected, user-customizable icons for DeepSeek Harness settings and sidebar surfaces.",
    "type": "module",
+@@ -15,7 +15,7 @@
+     "theme"
+   ],
+   "scripts": {
+-    "icons:generate": "node scripts/generate-icons.mjs",
++    "icons:generate": "node scripts/generate-icons.mjs && node scripts/generate-official-icons.mjs",
+     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.client.json --noEmit",
+     "build:host": "tsc -p tsconfig.json",
+     "build:client": "npm run icons:generate && tsdown && node scripts/normalize-client-banner.mjs",
+diff --git a/scripts/generate-official-icons.mjs b/scripts/generate-official-icons.mjs
+index fb4a93f..a8e0823 100644
+--- a/scripts/generate-official-icons.mjs
++++ b/scripts/generate-official-icons.mjs
+@@ -8,20 +8,27 @@
+  * The emitted catalog is embedded into the client bundle so the published
+  * package has zero runtime dependency on the primitives package.
+  */
+-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
++import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
+ import { dirname, join } from 'node:path'
+ import { fileURLToPath } from 'node:url'
+ 
+ const root = dirname(fileURLToPath(import.meta.url))
+-const defaultPrimitives = join(root, '..', 'node_modules', '@deepseek-ai', 'dsh-client-ui-primitives', 'lib', 'index.js')
++const desktopPrimitives = '/Applications/DSH Desktop.app/Contents/Resources/app/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js'
++const globalPrimitives = '/Users/lewis/.dsh/profiles/node_modules/@deepseek-ai/dsh-client-ui-primitives/lib/index.js'
++const defaultPrimitives = existsSync(desktopPrimitives)
++  ? desktopPrimitives
++  : existsSync(globalPrimitives)
++    ? globalPrimitives
++    : join(root, '..', 'node_modules', '@deepseek-ai', 'dsh-client-ui-primitives', 'lib', 'index.js')
+ const primitivesPath = process.argv[2] ?? defaultPrimitives
+ 
+ const ICON_EXPORTS = [
+-  "IconAgentPresetOutline16","IconApiOutline14","IconArchiveOutline20","IconBranchOutline16","IconBrowseOutline16","IconCheckOutline14","IconCheckOutline16","IconChecklistOutline14","IconChevronDownOutline14","IconChevronLeftOutline14","IconChevronRightOutline14","IconChevronUpOutline14","IconCloseFill14","IconCloseOutline16","IconCodeOutline16","IconCopyOutline16","IconCordisPluginOutline14","IconDarkOutline16","IconDataOutline16","IconDislikeFill16","IconDislikeOutline16","IconDownloadOutline16","IconEditOutline16","IconEllipsisOutline16","IconEnhanceOutline16","IconFolderClose16","IconFolderOpen16","IconFolderOpenOutline16","IconFollowsystemOutline16","IconFullscreenOutline16","IconGlobeOutline14","IconGoalOutline16","IconInspectOutline12","IconLightOutline16","IconLikeFill16","IconLikeOutline16","IconLinkOutline14","IconLinkOutline16","IconListPenOutline16","IconLoadingOutline16","IconNewChatOutline16","IconPanelLeftOutline16","IconPaperclipOutline16","IconPauseOutline16","IconPersonalizationOutline16","IconPlayOutline16","IconPlusOutline16","IconProjectAddOutline16","IconQuestionOutline14","IconQueueOutline14","IconRefreshOutline14","IconRefreshOutline16","IconRightUpOutline14","IconRightUpOutline16","IconSearchOutline16","IconSendOutline14","IconSendOutline16","IconSettingsOutline14","IconSettingsOutline16","IconShareOutline16","IconSkillOutline16","IconSparkle16","IconStopFill16","IconThinkOutline14","IconThinkOutline16","IconTrashOutline16","IconTreeCorner8x10","IconTriangleRightFill14","IconUserOutline16","IconWarningOutline16",
++  "IconAgentPresetOutline16","IconAlarmClockOutline16","IconApiOutline14","IconArchiveOutline20","IconBranchOutline16","IconBrowseOutline16","IconCheckOutline14","IconCheckOutline16","IconChecklistOutline14","IconChevronDownOutline14","IconChevronLeftOutline14","IconChevronRightOutline14","IconChevronUpOutline14","IconClockOutline16","IconCloseFill14","IconCloseOutline16","IconCodeOutline16","IconContextInjectionOutline16","IconCopyOutline16","IconCordisPluginOutline14","IconDarkOutline16","IconDataOutline16","IconDatabaseOutline16","IconDislikeFill16","IconDislikeOutline16","IconDownloadOutline16","IconEditOutline16","IconEllipsisOutline16","IconEnhanceOutline16","IconFolderClose16","IconFolderOpen16","IconFolderOpenOutline16","IconFollowsystemOutline16","IconFullscreenOutline16","IconGaugeOutline16","IconGlobeOutline14","IconGoalOutline16","IconInspectOutline12","IconLightOutline16","IconLikeFill16","IconLikeOutline16","IconLinkOutline14","IconLinkOutline16","IconListPenOutline16","IconLoadingOutline16","IconNewChatOutline16","IconPanelLeftOutline16","IconPaperclipOutline16","IconPauseOutline16","IconPersonalizationOutline16","IconPlayOutline16","IconPlusOutline16","IconProjectAddOutline16","IconQuestionOutline14","IconQueueOutline14","IconRefreshOutline14","IconRefreshOutline16","IconRightUpOutline14","IconRightUpOutline16","IconSearchOutline16","IconSendOutline14","IconSendOutline16","IconSettingsOutline14","IconSettingsOutline16","IconShareOutline16","IconSkillOutline16","IconSparkle16","IconStopFill16","IconThinkOutline14","IconThinkOutline16","IconTrashOutline16","IconTreeCorner8x10","IconTriangleRightFill14","IconUserOutline16","IconWarningOutline16",
+ ]
+ 
+ const ZH_LABELS = {
+   IconAgentPresetOutline16: '智能体预设',
++  IconAlarmClockOutline16: '闹钟',
+   IconApiOutline14: 'API',
+   IconArchiveOutline20: '归档',
+   IconBranchOutline16: '分支',
+@@ -33,13 +40,16 @@ const ZH_LABELS = {
+   IconChevronLeftOutline14: '向左',
+   IconChevronRightOutline14: '向右',
+   IconChevronUpOutline14: '向上',
++  IconClockOutline16: '时钟',
+   IconCloseFill14: '关闭',
+   IconCloseOutline16: '关闭',
+   IconCodeOutline16: '代码',
++  IconContextInjectionOutline16: '上下文注入',
+   IconCopyOutline16: '复制',
+   IconCordisPluginOutline14: '插件',
+   IconDarkOutline16: '月亮',
+   IconDataOutline16: '数据',
++  IconDatabaseOutline16: '数据库',
+   IconDislikeFill16: '不喜欢',
+   IconDislikeOutline16: '不喜欢',
+   IconDownloadOutline16: '下载',
+@@ -51,6 +61,7 @@ const ZH_LABELS = {
+   IconFolderOpenOutline16: '文件夹（打开·描线）',
+   IconFollowsystemOutline16: '跟随系统',
+   IconFullscreenOutline16: '全屏',
++  IconGaugeOutline16: '仪表',
+   IconGlobeOutline14: '地球',
+   IconGoalOutline16: '目标',
+   IconInspectOutline12: '检查',
+diff --git a/scripts/preflight.mjs b/scripts/preflight.mjs
+index f2c6157..a212f9b 100644
+--- a/scripts/preflight.mjs
++++ b/scripts/preflight.mjs
+@@ -22,7 +22,7 @@ const generatedCount = (generated.match(/^  "[^"]+":/gm) ?? []).length
+ if (generatedCount !== 50) throw new Error(`expected 50 generated Fluent icons, found ${generatedCount}`)
+ const officialGenerated = fs.readFileSync(officialGeneratedFile, 'utf8')
+ const officialGeneratedCount = (officialGenerated.match(/^    id: /gm) ?? []).length
+-if (officialGeneratedCount !== 70) throw new Error(`expected 70 generated official DSH icons, found ${officialGeneratedCount}`)
++if (officialGeneratedCount !== 75) throw new Error(`expected 75 generated official DSH icons, found ${officialGeneratedCount}`)
+ 
+ for (const requiredFile of ['cordis.patch.yml', 'README.md', 'README.zh.md', 'THIRD_PARTY_NOTICES.md', 'LICENSE']) {
+   if (!fs.existsSync(requiredFile)) throw new Error(`missing package file: ${requiredFile}`)
 diff --git a/src/client/dom/settings-adapter.ts b/src/client/dom/settings-adapter.ts
 index 93faa88..331829f 100644
 --- a/src/client/dom/settings-adapter.ts
@@ -63,6 +209,113 @@ index 93faa88..331829f 100644
    })
    const unsubscribe = options.subscribe?.(schedule) ?? (() => {})
  
+diff --git a/src/client/generated/official-dsh-icons.ts b/src/client/generated/official-dsh-icons.ts
+index 889a8df..bdeeddc 100644
+--- a/src/client/generated/official-dsh-icons.ts
++++ b/src/client/generated/official-dsh-icons.ts
+@@ -27,6 +27,16 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
+     source: "@deepseek-ai/dsh-client-ui-primitives",
+     license: "MIT",
+   },
++  {
++    id: "dsh.alarm-clock-outline16",
++    label: "闹钟",
++    labelEn: "Alarm Clock Outline16",
++    category: "core",
++    aliases: ["IconAlarmClockOutline16","alarm-clock-outline16","official","dsh","官方","闹钟","闹钟"],
++    svg: "<svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3.5 2.5 1.75 4\" stroke=\"currentColor\" stroke-width=\"1.25\" stroke-linecap=\"round\"></path><path d=\"M12.5 2.5 14.25 4\" stroke=\"currentColor\" stroke-width=\"1.25\" stroke-linecap=\"round\"></path><circle cx=\"8\" cy=\"8.5\" r=\"4.75\" stroke=\"currentColor\" stroke-width=\"1.25\"></circle><path d=\"M8 5.75V8.5L10 9.75\" stroke=\"currentColor\" stroke-width=\"1.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><path d=\"m4.75 12.25-1 1.5\" stroke=\"currentColor\" stroke-width=\"1.25\" stroke-linecap=\"round\"></path><path d=\"m11.25 12.25 1 1.5\" stroke=\"currentColor\" stroke-width=\"1.25\" stroke-linecap=\"round\"></path></svg>",
++    source: "@deepseek-ai/dsh-client-ui-primitives",
++    license: "MIT",
++  },
+   {
+     id: "dsh.api-outline14",
+     label: "API",
+@@ -137,6 +147,16 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
+     source: "@deepseek-ai/dsh-client-ui-primitives",
+     license: "MIT",
+   },
++  {
++    id: "dsh.clock-outline16",
++    label: "时钟",
++    labelEn: "Clock Outline16",
++    category: "core",
++    aliases: ["IconClockOutline16","clock-outline16","official","dsh","官方","时钟","时钟"],
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"8\" cy=\"8\" r=\"6.375\" stroke=\"currentColor\" stroke-width=\"1.25\"></circle><path d=\"M8 4.4V8.3L10.7 9.85\" stroke=\"currentColor\" stroke-width=\"1.25\"></path></svg>",
++    source: "@deepseek-ai/dsh-client-ui-primitives",
++    license: "MIT",
++  },
+   {
+     id: "dsh.close-fill14",
+     label: "关闭",
+@@ -167,6 +187,16 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
+     source: "@deepseek-ai/dsh-client-ui-primitives",
+     license: "MIT",
+   },
++  {
++    id: "dsh.context-injection-outline16",
++    label: "上下文注入",
++    labelEn: "Context Injection Outline16",
++    category: "core",
++    aliases: ["IconContextInjectionOutline16","context-injection-outline16","official","dsh","官方","上下文注入","上下文注入"],
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.9512 1.13281C12.401 1.20666 12.8093 1.34164 13.1738 1.60645C13.4282 1.79137 13.6521 2.01609 13.8369 2.27051C14.1574 2.71187 14.2892 3.21614 14.3506 3.78223C14.4105 4.33532 14.4102 5.02658 14.4102 5.87305V10.0273C14.4102 10.8738 14.4105 11.5651 14.3506 12.1182C14.2892 12.6843 14.1574 13.1885 13.8369 13.6299C13.652 13.8843 13.4282 14.109 13.1738 14.2939C12.7324 14.6146 12.2273 14.7462 11.6611 14.8076C11.1081 14.8675 10.4166 14.8672 9.57031 14.8672H6.43164C5.58533 14.8672 4.89387 14.8675 4.34082 14.8076C3.77474 14.7463 3.27046 14.6144 2.8291 14.2939C2.57453 14.109 2.35003 13.8844 2.16504 13.6299C1.84444 13.1885 1.71272 12.6844 1.65137 12.1182C1.59147 11.5651 1.5918 10.8738 1.5918 10.0273V5.87305C1.5918 5.02655 1.59146 4.33533 1.65137 3.78223C1.71272 3.21606 1.84443 2.71191 2.16504 2.27051C2.35003 2.01596 2.57453 1.79141 2.8291 1.60645C3.19332 1.34202 3.60062 1.20669 4.0498 1.13281V2.56445C3.87191 2.61154 3.74906 2.66836 3.65137 2.73926C3.51583 2.83777 3.3964 2.95726 3.29785 3.09277C3.1794 3.25581 3.09143 3.4856 3.04297 3.93262C2.9931 4.39287 2.99219 4.99529 2.99219 5.87305V10.0273C2.99219 10.905 2.99312 11.5075 3.04297 11.9678C3.09142 12.4147 3.17943 12.6446 3.29785 12.8076C3.3964 12.9431 3.51583 13.0626 3.65137 13.1611C3.81441 13.2795 4.04437 13.3676 4.49121 13.416C4.95142 13.4658 5.55411 13.4668 6.43164 13.4668H9.57031C10.4479 13.4668 11.0505 13.4659 11.5107 13.416C11.9576 13.3675 12.1876 13.2796 12.3506 13.1611C12.4861 13.0626 12.6056 12.9431 12.7041 12.8076C12.8224 12.6446 12.9106 12.4146 12.959 11.9678C13.0088 11.5075 13.0098 10.905 13.0098 10.0273V5.87305C13.0098 4.99532 13.0088 4.39286 12.959 3.93262C12.9105 3.48579 12.8225 3.2558 12.7041 3.09277C12.6056 2.95727 12.4861 2.83778 12.3506 2.73926C12.2527 2.66816 12.1296 2.61064 11.9512 2.56348V1.13281Z\" fill=\"currentColor\"></path><path d=\"M9.32227 11.4141H4.95508V10.2148H9.32227V11.4141Z\" fill=\"currentColor\"></path><path d=\"M11.0439 8.90039H4.95508V7.70117H11.0439V8.90039Z\" fill=\"currentColor\"></path><path d=\"M8.59961 3.75781L9.70996 2.64746L10.5586 3.49609L8.49512 5.55957C8.22173 5.83266 7.77816 5.83285 7.50488 5.55957L5.44141 3.49512L6.28906 2.64746L7.40039 3.75781V1.09668H8.59961V3.75781Z\" fill=\"currentColor\"></path></svg>",
++    source: "@deepseek-ai/dsh-client-ui-primitives",
++    license: "MIT",
++  },
+   {
+     id: "dsh.copy-outline16",
+     label: "复制",
+@@ -207,6 +237,16 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
+     source: "@deepseek-ai/dsh-client-ui-primitives",
+     license: "MIT",
+   },
++  {
++    id: "dsh.database-outline16",
++    label: "数据库",
++    labelEn: "Database Outline16",
++    category: "core",
++    aliases: ["IconDatabaseOutline16","database-outline16","official","dsh","官方","数据库","数据库"],
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"8\" cy=\"3.6\" rx=\"5.75\" ry=\"2.4\" stroke=\"currentColor\" stroke-width=\"1.25\"></ellipse><path d=\"M2.25 3.6V12.3A5.75 2.4 0 0 0 13.75 12.3V3.6\" stroke=\"currentColor\" stroke-width=\"1.25\"></path><path d=\"M2.25 7.95A5.75 2.4 0 0 0 13.75 7.95\" stroke=\"currentColor\" stroke-width=\"1.25\"></path></svg>",
++    source: "@deepseek-ai/dsh-client-ui-primitives",
++    license: "MIT",
++  },
+   {
+     id: "dsh.dislike-fill16",
+     label: "不喜欢",
+@@ -317,6 +357,16 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
+     source: "@deepseek-ai/dsh-client-ui-primitives",
+     license: "MIT",
+   },
++  {
++    id: "dsh.gauge-outline16",
++    label: "仪表",
++    labelEn: "Gauge Outline16",
++    category: "core",
++    aliases: ["IconGaugeOutline16","gauge-outline16","official","dsh","官方","仪表","仪表"],
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3.49 13.26A6.375 6.375 0 1 1 12.51 13.26\" stroke=\"currentColor\" stroke-width=\"1.25\"></path><path d=\"M8 8.75L11.4 5.35\" stroke=\"currentColor\" stroke-width=\"1.25\"></path><circle cx=\"8\" cy=\"8.75\" r=\"1.55\" fill=\"currentColor\"></circle></svg>",
++    source: "@deepseek-ai/dsh-client-ui-primitives",
++    license: "MIT",
++  },
+   {
+     id: "dsh.globe-outline14",
+     label: "地球",
+@@ -533,7 +583,7 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
+     labelEn: "Refresh Outline16",
+     category: "core",
+     aliases: ["IconRefreshOutline16","refresh-outline16","official","dsh","官方","刷新","刷新（大）"],
+-    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7.92136 0.349152C10.3744 0.349234 12.5564 1.5052 13.9557 3.29894L15.1281 2.12759C15.3303 1.92546 15.6767 2.06943 15.6767 2.35538V5.53923C15.6766 5.71626 15.5329 5.85976 15.3559 5.86002H12.171C11.8854 5.8597 11.7426 5.51465 11.9443 5.31249L12.9641 4.29056C11.8237 2.74305 9.98908 1.74106 7.92136 1.74097C4.46436 1.74097 1.66233 4.543 1.66233 8C1.66233 11.457 4.46436 14.259 7.92136 14.259C11.3782 14.2589 14.1804 11.4569 14.1804 8H15.5722C15.5722 12.2251 12.1465 15.6507 7.92136 15.6508C3.69614 15.6508 0.270508 12.2252 0.270508 8C0.270508 3.77478 3.69614 0.349152 7.92136 0.349152Z\" fill=\"currentColor\"></path></svg>",
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path transform=\"translate(0.8 0.8) scale(0.9)\" d=\"M7.92136 0.349152C10.3744 0.349234 12.5564 1.5052 13.9557 3.29894L15.1281 2.12759C15.3303 1.92546 15.6767 2.06943 15.6767 2.35538V5.53923C15.6766 5.71626 15.5329 5.85976 15.3559 5.86002H12.171C11.8854 5.8597 11.7426 5.51465 11.9443 5.31249L12.9641 4.29056C11.8237 2.74305 9.98908 1.74106 7.92136 1.74097C4.46436 1.74097 1.66233 4.543 1.66233 8C1.66233 11.457 4.46436 14.259 7.92136 14.259C11.3782 14.2589 14.1804 11.4569 14.1804 8H15.5722C15.5722 12.2251 12.1465 15.6507 7.92136 15.6508C3.69614 15.6508 0.270508 12.2252 0.270508 8C0.270508 3.77478 3.69614 0.349152 7.92136 0.349152Z\" fill=\"currentColor\"></path></svg>",
+     source: "@deepseek-ai/dsh-client-ui-primitives",
+     license: "MIT",
+   },
+@@ -553,7 +603,7 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
+     labelEn: "Right Up Outline16",
+     category: "core",
+     aliases: ["IconRightUpOutline16","right-up-outline16","official","dsh","官方","右上","右上（大）"],
+-    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M13.588429 5.147807C13.588429 4.739638 13.587271 4.403003 13.582013 4.118684L1.703098 15.99968L0.85155 15.148178L0 14.294485L11.878915 2.413442C11.594721 2.408199 11.257569 2.409154 10.849776 2.409154H2.400594V0.000001H10.849776C11.644471 0.000001 12.338899 -0.001059 12.901622 0.059909C13.486363 0.123352 14.071136 0.265493 14.598303 0.648292C14.886598 0.857751 15.141981 1.110984 15.351433 1.399281C15.734578 1.926807 15.876362 2.512925 15.939743 3.098105C16.000775 3.660718 15.99968 4.353347 15.99968 5.147807V13.599133H13.588429V5.147807Z\" fill=\"currentColor\"></path></svg>",
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M11.3822 6.28945C11.3822 6.02863 11.3815 5.81352 11.3781 5.63184L3.7875 13.2238L3.24336 12.6797L2.69922 12.1342L10.2898 4.54219C10.1083 4.53884 9.89281 4.53945 9.63223 4.53945H4.2332V3H9.63223C10.14 3 10.5838 2.99932 10.9434 3.03828C11.317 3.07882 11.6907 3.16965 12.0275 3.41426C12.2118 3.5481 12.3749 3.70992 12.5088 3.89414C12.7536 4.23123 12.8443 4.60576 12.8848 4.97969C12.9237 5.3392 12.923 5.78179 12.923 6.28945V11.6898H11.3822V6.28945Z\" fill=\"currentColor\"></path></svg>",
+     source: "@deepseek-ai/dsh-client-ui-primitives",
+     license: "MIT",
+   },
 diff --git a/src/client/index.tsx b/src/client/index.tsx
 index 1551adc..5c9ada8 100644
 --- a/src/client/index.tsx
@@ -136,6 +389,19 @@ index 87f3afe..87872bc 100644
  export const inject = ['webServer']
  
  /** Register the durable user layer and fixed-namespace browser seam. */
+diff --git a/tests/catalog.spec.ts b/tests/catalog.spec.ts
+index f5dc86a..7513f9f 100644
+--- a/tests/catalog.spec.ts
++++ b/tests/catalog.spec.ts
+@@ -3,7 +3,7 @@ import { ICON_CATALOG } from '../src/client/catalog.ts'
+ 
+ describe('icon catalog', () => {
+   it('ships unique, local, monochrome icons', () => {
+-    expect(ICON_CATALOG).toHaveLength(121)
++    expect(ICON_CATALOG).toHaveLength(126)
+     expect(new Set(ICON_CATALOG.map(icon => icon.id)).size).toBe(ICON_CATALOG.length)
+     for (const icon of ICON_CATALOG) {
+       expect(icon.svg).toMatch(/viewBox="[-+]?\d+(?:\.\d+)? [-+]?\d+(?:\.\d+)? [-+]?\d+(?:\.\d+)? [-+]?\d+(?:\.\d+)?"/)
 diff --git a/tests/host.spec.ts b/tests/host.spec.ts
 index cff748e..7575541 100644
 --- a/tests/host.spec.ts
