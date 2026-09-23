@@ -13,11 +13,18 @@ function target(key: TargetKey): DetectedTarget {
 describe('resolveIcon', () => {
   it.each([
     ['settings.section:market', 'plugin.market', 'plugin'],
+    ['settings.section:icon-theme', 'image', 'plugin'],
     ['settings.section:notification', 'alert', 'preset'],
     ['settings.section:unfamiliar-folder-tool', 'folder', 'inferred'],
   ] as const)('%s resolves to %s', (key, iconId, source) => {
     expect(resolveIcon(target(key), { ...DEFAULT_CONFIG, overrides: {} }, { hasOriginal: false, originalIsGeneric: true }))
       .toMatchObject({ iconId, source, reason: source === 'plugin' ? 'reasonPlugin' : source === 'preset' ? 'reasonPreset' : 'reasonInferred' })
+  })
+
+  it('curated icon-theme image icon resolves even under prefer policy with original svg', () => {
+    const key = 'settings.section:icon-theme' as const
+    expect(resolveIcon(target(key), { ...DEFAULT_CONFIG, originalPolicy: 'prefer', overrides: {} }, { hasOriginal: true, originalIsGeneric: true }))
+      .toMatchObject({ iconId: 'image', source: 'plugin' })
   })
 
   it('manual overrides win over curated plugin icons', () => {

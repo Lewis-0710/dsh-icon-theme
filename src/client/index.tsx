@@ -28,7 +28,7 @@ interface IconThemeClientContext {
   on?: (event: string, listener: () => void) => () => void
 }
 
-export const name = 'dsh-icon-theme'
+export const name = 'dsh-icon-theme-custom'
 export const inject = ['slots', 'locale']
 
 export function apply(ctx: IconThemeClientContext): void {

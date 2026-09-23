@@ -193,6 +193,14 @@ describe('mountSettingsAdapter', () => {
     button.removeAttribute('data-dsh-better-sidebar-settings-nav')
     await tick()
     expect(button.hasAttribute('data-dsh-icon-theme-managed')).toBe(true)
+
+    button.setAttribute('data-dsh-market-nav-icon', '')
+    await tick()
+    expect(button.hasAttribute('data-dsh-icon-theme-managed')).toBe(false)
+
+    button.removeAttribute('data-dsh-market-nav-icon')
+    await tick()
+    expect(button.hasAttribute('data-dsh-icon-theme-managed')).toBe(true)
     dispose()
   })
 

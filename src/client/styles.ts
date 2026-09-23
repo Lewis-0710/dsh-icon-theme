@@ -2,7 +2,9 @@ const STYLE_ID = 'dsh-icon-theme/runtime'
 
 export const STYLE_TEXT = `
 [data-dsh-icon-theme-managed] > svg:first-of-type { display: none !important; }
+[data-dsh-icon-theme-managed]::before { display: none !important; }
 [data-dsh-icon-theme-managed][data-dsh-better-sidebar-settings-nav]::before { display: none !important; }
+[data-dsh-icon-theme-managed][data-dsh-market-nav-icon]::before { display: none !important; }
 [data-dsh-icon-theme-glyph] {
   width: 16px; height: 16px; flex: 0 0 16px; display: inline-block;
   background: currentColor;

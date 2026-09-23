@@ -10,7 +10,7 @@ export const DEFAULT_CONFIG: Readonly<IconThemeConfig> = Object.freeze({
   originalPolicy: 'prefer',
 })
 
-export const Config = Schema.object({
+export const Config: Schema<any, IconThemeConfig> = Schema.object({
   overrides: Schema.dict(Schema.string()).default({}),
   originalPolicy: Schema.union(['prefer', 'replace-generic']).default(DEFAULT_CONFIG.originalPolicy),
 })

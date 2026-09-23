@@ -11,7 +11,10 @@ interface SettingsMatch {
 }
 
 /** Third-party markers that indicate a settings row already has a custom icon. */
-const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = ['data-dsh-better-sidebar-settings-nav'] as const
+const TRUSTED_THIRD_PARTY_SETTINGS_MARKERS = [
+  'data-dsh-better-sidebar-settings-nav',
+  'data-dsh-market-nav-icon',
+] as const
 
 function directSvg(element: Element): SVGElement | undefined {
   return Array.from(element.children).find(child => child.tagName.toLowerCase() === 'svg') as SVGElement | undefined
@@ -130,7 +133,7 @@ export function mountSettingsAdapter(options: AdapterOptions): () => void {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['role', 'id', 'aria-labelledby', 'aria-current', 'data-slot', 'data-dsh-icon-theme-managed', 'data-dsh-better-sidebar-settings-nav'],
+    attributeFilter: ['role', 'id', 'aria-labelledby', 'aria-current', 'data-slot', 'data-dsh-icon-theme-managed', 'data-dsh-better-sidebar-settings-nav', 'data-dsh-market-nav-icon'],
   })
   const unsubscribe = options.subscribe?.(schedule) ?? (() => {})
 

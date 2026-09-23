@@ -1,3 +1,11 @@
+> [!NOTE]
+> **Fork 维护版本** | 本仓库是 [yzke/dsh-icon-theme](https://github.com/yzke/dsh-icon-theme) 的维护分支。
+>
+> **与上游差异**：
+> 1. **脱离主题单选互斥**：包名与 Cordis 插件名变更为 `dsh-icon-theme-custom`，避免命中 `dshmarket` 线上注册表的 `theme` 分类互斥逻辑（`activateTheme`），使图标插件能与 `dsh-theme-liquid-glass` 等纯主题插件无冲突共存。
+>
+> 详见 [sync.patch](./sync.patch)。
+
 # dsh-icon-theme
 
 English | [简体中文](README.zh.md)

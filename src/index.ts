@@ -6,7 +6,7 @@ import { installSettingsApi } from './settings-api.ts'
 export { Config, DEFAULT_CONFIG, normalizeConfig } from './config.ts'
 export type { IconThemeConfig } from './config.ts'
 
-export const name = 'dsh-icon-theme'
+export const name = 'dsh-icon-theme-custom'
 export const inject = ['webServer']
 
 /** Register the durable user layer and fixed-namespace browser seam. */

@@ -19,7 +19,7 @@ describe('host settings owner', () => {
       }),
     }
     apply(ctx as never, { ...DEFAULT_CONFIG, overrides: { 'settings.section:market': 'apps' } })
-    expect(name).toBe('dsh-icon-theme')
+    expect(name).toBe('dsh-icon-theme-custom')
     expect(inject).toEqual(['webServer'])
     expect(calls).toHaveLength(1)
     expect(calls[0]?.[0]).toBe('dsh-icon-theme')

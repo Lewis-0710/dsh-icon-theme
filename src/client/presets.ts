@@ -1,5 +1,6 @@
 export const CURATED_PLUGIN_ICONS: Readonly<Record<string, string>> = Object.freeze({
   'settings.section:market': 'plugin.market',
+  'settings.section:icon-theme': 'image',
 })
 
 export const EXACT_PRESETS: Readonly<Record<string, string>> = Object.freeze({
@@ -13,7 +14,7 @@ export const EXACT_PRESETS: Readonly<Record<string, string>> = Object.freeze({
   'settings.section:at-file': 'document_mention',
   'settings.section:notification': 'alert',
   'settings.section:better-sidebar': 'panel_right_gallery',
-  'settings.section:icon-theme': 'color',
+  'settings.section:icon-theme': 'image',
   'sidebar.footer.action:chat-import': 'arrow_import',
   'sidebar.footer.action:usage-stats': 'chart_multiple',
   'sidebar.footer.action:bookmarks': 'bookmark',
