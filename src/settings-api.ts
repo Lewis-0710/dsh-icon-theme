@@ -74,26 +74,11 @@ function validateRequest(value: unknown): SettingsRequest {
   return { action: 'mutate', ops, expectedRevision: value.expectedRevision as number }
 }
 
-function findDescriptor(settings: SettingsProvider): { ns: string; value: unknown; revision: number } | undefined {
-  const descriptors = settings.describe({ redactSecrets: true })
-  const descriptor = descriptors.find(candidate =>
-    candidate.ns === 'dsh-icon-theme' ||
-    candidate.ns === 'dsh-icon-theme-custom' ||
-    candidate.ns.endsWith('icon-theme') ||
-    candidate.ns.endsWith('icon-theme-custom')
-  )
-  if (descriptor) {
-    return { ns: descriptor.ns, value: descriptor.value, revision: descriptor.revision }
-  }
-  return undefined
-}
-
 function view(settings: SettingsProvider): { value: unknown; revision: number; writable: boolean } {
-  const descriptor = findDescriptor(settings)
-  if (descriptor === undefined) {
-    return { value: {}, revision: 0, writable: settings.writable ?? true }
-  }
-  return { value: descriptor.value, revision: descriptor.revision, writable: settings.writable ?? true }
+  const ns = settingsNamespace('dsh-icon-theme')
+  const descriptor = settings.describe({ redactSecrets: true }).find(candidate => candidate.ns === ns)
+  if (descriptor === undefined) throw new Error('settings namespace unavailable')
+  return { value: descriptor.value, revision: descriptor.revision, writable: settings.writable }
 }
 
 function hasTrustedOrigin(req: IncomingMessage): boolean {
@@ -128,8 +113,7 @@ export function createSettingsHandler(settings: SettingsProvider) {
     try {
       const payload = validateRequest(await readJson(req))
       if (payload.action === 'mutate') {
-        const targetNs = findDescriptor(settings)?.ns ?? settingsNamespace('dsh-icon-theme')
-        await settings.mutate(targetNs as any, payload.ops ?? [], payload.expectedRevision)
+        await settings.mutate(settingsNamespace('dsh-icon-theme'), payload.ops ?? [], payload.expectedRevision)
       }
       writeJson(res, 200, { ok: true, ...view(settings) })
     } catch (error) {
@@ -146,20 +130,7 @@ export function createSettingsHandler(settings: SettingsProvider) {
 export function installSettingsApi(ctx: HostContext, config?: IconThemeConfig): void {
   const base = normalizeConfig(config)
   ctx.inject(['settings'], (settingsCtx) => {
-    const settings = settingsCtx.settings as any
-    if (typeof settings.configure === 'function') {
-      try {
-        settingsCtx.effect(
-          () => settings.configure({ auto: false }, (ctx as any).fiber),
-          'dsh-icon-theme: settings presentation',
-        )
-      } catch {
-        // ignore configuration conflicts gracefully
-      }
-    } else if (typeof settings.register === 'function') {
-      settings.register(settingsNamespace('dsh-icon-theme'), Config, { base, applies: 'live' })
-    }
-
+    settingsCtx.settings.register(settingsNamespace('dsh-icon-theme'), Config, { base, applies: 'live' })
     settingsCtx.effect(
       () => ctx.webServer.register({ kind: 'exact', path: SETTINGS_API_PATH, handler: createSettingsHandler(settingsCtx.settings) }),
       'dsh-icon-theme: settings API',

@@ -10,11 +10,6 @@
 > 4. **保护原生与第三方专有图标（无硬编码通用机制）**：
 >    - **防止强行覆盖插件市场**：移除上游强制将插件市场映射为旧版九宫格的写死规则，优先放行 `dshmarket` 官方自带的高清图标。
 >    - **通用识别第三方专有图标**：通过通用规范自动识别第三方插件注入的自定义 DOM 标记，不硬编码任何具体插件名称或属性名；在默认策略下优先保留原图（`prefer`），杜绝粗暴劫持与覆盖。
-> 5. **全面兼容适配 DSH Desktop 2.0.14+（DSH 0.1.7+）**：
->    - **修复设置修改失活**：解决新版 DSH 废弃 `settings.register()` 导致后端插件崩溃、API 挂载失败从而引发设置面板全部“更改/重置”按钮禁用失效的问题。
->    - **适配新版在线易变配置架构**：在 Schema 中为 `overrides` 和 `originalPolicy` 声明 `.volatile()`，满足新版 `SettingsForms` 在线编辑校验；通过 `unwrapVolatile` 保证配置解包纯粹无冗余包装。
->    - **配置策略声明**：通过 `settings.configure({ auto: false })` 声明展示策略，优雅屏蔽新版自动表单，完整保留插件自带的高清可视化图标选择界面。
->    - **依赖范围扩充**：`peerDependencies` 扩充支持 `0.1.7-rc.0+`，官方图标提取脚本支持自适应解析新版 `*Artwork` 矢量组件。
 >
 > 详见 [sync.patch](./sync.patch)。
 
@@ -58,8 +53,8 @@ npm run build
 dsh plugin --profile web add link:"$PWD"
 ```
 
-DSH peer 兼容范围：`>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0 || >=0.1.7-rc.0 <0.2.0-0`，
-包含 DSH Desktop 2.0.14+（`0.1.7-rc.1`）及 GitHub 预览版本。从源码构建需要 Node.js 22 或更高版本。
+Supported DSH peer range: `>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0`.
+This includes the source-only `dsh-v0.1.2-alpha.1` GitHub preview. Node.js 22 or newer is required for source builds.
 
 ## Uninstall
 
