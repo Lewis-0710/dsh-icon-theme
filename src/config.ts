@@ -20,7 +20,10 @@ function unwrapRaw(val: unknown): unknown {
 const OverridesSchema = Schema.transform(
   Schema.any(),
   (val: unknown) => {
-    const raw = unwrapRaw(val)
+    let raw: unknown = val
+    while (raw !== null && typeof raw === 'object' && typeof (raw as any).get === 'function') {
+      raw = (raw as any).get()
+    }
     if (raw === null || raw === undefined) return {}
     if (typeof raw !== 'object' || Array.isArray(raw)) throw new TypeError('overrides must be an object')
     const result: Record<string, string> = {}
@@ -35,7 +38,10 @@ const OverridesSchema = Schema.transform(
 const OriginalPolicySchema = Schema.transform(
   Schema.any(),
   (val: unknown) => {
-    const raw = unwrapRaw(val)
+    let raw: unknown = val
+    while (raw !== null && typeof raw === 'object' && typeof (raw as any).get === 'function') {
+      raw = (raw as any).get()
+    }
     if (raw === 'replace-generic') return 'replace-generic'
     return 'prefer'
   },

@@ -129,11 +129,12 @@ export function createSettingsHandler(settings: SettingsProvider) {
     try {
       const payload = validateRequest(await readJson(req))
       if (payload.action === 'mutate') {
-        const targetNs = findDescriptor(settings)?.ns ?? settingsNamespace('dsh-icon-theme')
+        const targetNs = findDescriptor(settings)?.ns ?? settingsNamespace('dsh-icon-theme-custom')
         await settings.mutate(targetNs as any, payload.ops ?? [], payload.expectedRevision)
       }
       writeJson(res, 200, { ok: true, ...view(settings) })
     } catch (error) {
+      console.error('[dsh-icon-theme] settings API error:', error)
       const conflict = isRecord(error) && error.code === 'SETTINGS_CONFLICT'
       writeJson(res, conflict ? 409 : 400, {
         ok: false,
