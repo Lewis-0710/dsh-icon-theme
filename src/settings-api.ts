@@ -75,12 +75,13 @@ function validateRequest(value: unknown): SettingsRequest {
 }
 
 function findDescriptor(settings: SettingsProvider): { ns: string; value: unknown; revision: number } | undefined {
+  if (typeof settings?.describe !== 'function') return undefined
   const descriptors = settings.describe({ redactSecrets: true })
   const descriptor = descriptors.find(candidate =>
-    candidate.ns === 'dsh-icon-theme' ||
     candidate.ns === 'dsh-icon-theme-custom' ||
-    candidate.ns.endsWith('icon-theme') ||
-    candidate.ns.endsWith('icon-theme-custom')
+    candidate.ns === 'dsh-icon-theme' ||
+    candidate.ns.endsWith('icon-theme-custom') ||
+    candidate.ns.endsWith('icon-theme')
   )
   if (descriptor) {
     return { ns: descriptor.ns, value: descriptor.value, revision: descriptor.revision }
@@ -157,7 +158,8 @@ export function installSettingsApi(ctx: HostContext, config?: IconThemeConfig): 
         // ignore configuration conflicts gracefully
       }
     } else if (typeof settings.register === 'function') {
-      settings.register(settingsNamespace('dsh-icon-theme'), Config, { base, applies: 'live' })
+      const ns = findDescriptor(settings)?.ns ?? settingsNamespace('dsh-icon-theme')
+      settings.register(ns, Config, { base, applies: 'live' })
     }
 
     settingsCtx.effect(

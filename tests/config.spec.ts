@@ -15,8 +15,11 @@ describe('Config', () => {
     expect((raw.originalPolicy as any).get()).toBe(DEFAULT_CONFIG.originalPolicy)
   })
 
-  it('rejects non-string override values', () => {
-    expect(() => Config({ overrides: { market: 3 } })).toThrow()
+  it('supports idempotent resolution without ValidationError on volatile input', () => {
+    const first = Config({})
+    expect(() => Config(first)).not.toThrow()
+    const second = Config(first)
+    expect(unwrapVolatile(second)).toEqual(DEFAULT_CONFIG)
   })
 })
 

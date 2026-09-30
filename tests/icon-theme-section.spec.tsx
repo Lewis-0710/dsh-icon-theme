@@ -7,7 +7,13 @@ import { createIconThemeStore, type SettingsScopeLike, type SlotLedgerLike } fro
 
 afterEach(cleanup)
 
-function harness(sidebarEntries: Array<{ options: { id: string; order?: number; label?: string } }> = []) {
+function harness(
+  sidebarEntries: Array<{ options: { id: string; order?: number; label?: string } }> = [],
+  settingsEntries: Array<{ options: { id: string; order?: number; label?: string } }> = [
+    { options: { id: 'icon-theme', order: 40, label: '图标主题' } },
+    { options: { id: 'unknown-feature', order: 50, label: '神秘功能' } },
+  ],
+) {
   const listeners = new Set<() => void>()
   const scope: SettingsScopeLike & { writes: unknown[][]; value: unknown } = {
     value: {},
@@ -29,10 +35,7 @@ function harness(sidebarEntries: Array<{ options: { id: string; order?: number; 
   }
   const slots: SlotLedgerLike = {
     entriesOfSlot: name => name === 'settings.section'
-      ? [
-          { options: { id: 'icon-theme', order: 40, label: '图标主题' } },
-          { options: { id: 'unknown-feature', order: 50, label: '神秘功能' } },
-        ]
+      ? settingsEntries
       : sidebarEntries,
     subscribe: () => () => {},
   }
@@ -76,12 +79,12 @@ describe('IconThemeSection', () => {
     store.dispose()
   })
 
-  it('shows a gear placeholder and keep-original hint when a sidebar original is preserved', () => {
+  it('shows an authentic original icon and keep-original hint when a sidebar original is preserved', () => {
     const { scope, store } = harness([{ options: { id: 'chat-import' } }])
     render(<IconThemeSection store={store} t={t} />)
     const row = screen.getByText('导入会话').closest('[data-target-key]') as HTMLElement
     const preview = row.querySelector('.dit-preview') as HTMLElement
-    expect(preview.querySelector('[data-icon-id="settings"]')).toBeTruthy()
+    expect(preview.querySelector('[data-icon-id="arrow_import"]')).toBeTruthy()
     expect(within(preview).getByText('原图标')).toBeTruthy()
     expect(scope.writes).toEqual([])
     store.dispose()
@@ -151,6 +154,32 @@ describe('IconThemeSection', () => {
     fireEvent.click(within(row).getByRole('button', { name: 'Change' }))
     expect(screen.getByRole('button', { name: 'Apps' })).toBeTruthy()
     expect(screen.queryByRole('button', { name: '插件' })).toBeNull()
+    store.dispose()
+  })
+
+  it('renders authentic DSH native icons for built-in settings sections', () => {
+    const { store } = harness([], [
+      { options: { id: 'account', label: '账号与余额' } },
+      { options: { id: 'models', label: '模型' } },
+      { options: { id: 'plugins', label: '内置插件' } },
+      { options: { id: 'archived-sessions', label: '归档会话' } },
+      { options: { id: 'agent-presets', label: '智能体预设' } },
+    ])
+    render(<IconThemeSection store={store} t={t} />)
+    const accountRow = screen.getByText('账号与余额').closest('[data-target-key]') as HTMLElement
+    expect(accountRow.querySelector('.dit-preview [data-icon-id="dsh.user-outline16"]')).toBeTruthy()
+
+    const modelsRow = screen.getByText('模型').closest('[data-target-key]') as HTMLElement
+    expect(modelsRow.querySelector('.dit-preview [data-icon-id="dsh.data-outline16"]')).toBeTruthy()
+
+    const pluginsRow = screen.getByText('内置插件').closest('[data-target-key]') as HTMLElement
+    expect(pluginsRow.querySelector('.dit-preview [data-icon-id="dsh.personalization-outline16"]')).toBeTruthy()
+
+    const archiveRow = screen.getByText('归档会话').closest('[data-target-key]') as HTMLElement
+    expect(archiveRow.querySelector('.dit-preview [data-icon-id="dsh.archive-outline20"]')).toBeTruthy()
+
+    const agentRow = screen.getByText('智能体预设').closest('[data-target-key]') as HTMLElement
+    expect(agentRow.querySelector('.dit-preview [data-icon-id="dsh.agent-preset-outline16"]')).toBeTruthy()
     store.dispose()
   })
 })

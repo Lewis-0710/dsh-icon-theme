@@ -10,9 +10,40 @@ export const DEFAULT_CONFIG: Readonly<IconThemeConfig> = Object.freeze({
   originalPolicy: 'prefer',
 })
 
+function unwrapRaw(val: unknown): unknown {
+  if (val !== null && typeof val === 'object' && typeof (val as any).get === 'function') {
+    return unwrapRaw((val as any).get())
+  }
+  return val
+}
+
+const OverridesSchema = Schema.transform(
+  Schema.any(),
+  (val: unknown) => {
+    const raw = unwrapRaw(val)
+    if (raw === null || raw === undefined) return {}
+    if (typeof raw !== 'object' || Array.isArray(raw)) throw new TypeError('overrides must be an object')
+    const result: Record<string, string> = {}
+    for (const [k, v] of Object.entries(raw)) {
+      if (typeof v !== 'string') throw new TypeError('override value must be string')
+      result[k] = v
+    }
+    return result
+  },
+).default({}).volatile()
+
+const OriginalPolicySchema = Schema.transform(
+  Schema.any(),
+  (val: unknown) => {
+    const raw = unwrapRaw(val)
+    if (raw === 'replace-generic') return 'replace-generic'
+    return 'prefer'
+  },
+).default(DEFAULT_CONFIG.originalPolicy).volatile()
+
 export const Config: Schema<any, any> = Schema.object({
-  overrides: Schema.dict(Schema.string()).default({}).volatile(),
-  originalPolicy: Schema.union(['prefer', 'replace-generic']).default(DEFAULT_CONFIG.originalPolicy).volatile(),
+  overrides: OverridesSchema,
+  originalPolicy: OriginalPolicySchema,
 })
 
 export function unwrapVolatile<T>(value: T): T {

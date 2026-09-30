@@ -7,6 +7,7 @@ import { IconPicker } from './IconPicker.tsx'
 import { ICON_CATALOG } from './catalog.ts'
 import type { AdapterReport, TargetAdapterStatus } from './dom/adapter-types.ts'
 import { SIDEBAR_COMPATIBILITY } from './sidebar-compat.ts'
+import { getOriginalIconId } from './presets.ts'
 
 type Filter = 'all' | 'settings' | 'sidebar' | 'unrecognized' | 'customized'
 
@@ -20,8 +21,9 @@ function sourceLabel(source: ResolutionSource, t: Translate): string {
   return t(source)
 }
 
-function previewIcon(iconId: string | null): string {
-  return iconId ?? 'settings'
+function previewIcon(target: DetectedTarget, resolution: Resolution): string {
+  if (resolution.iconId) return resolution.iconId
+  return getOriginalIconId(target)
 }
 
 function effectiveResolution(target: DetectedTarget, snapshot: IconThemeSnapshot, store: IconThemeStore): Resolution {
@@ -117,7 +119,7 @@ export function IconThemeSection({ store, t }: IconThemeSectionProps) {
           return (
             <div className="dit-row" key={target.key} data-target-key={target.key}>
               <div className="dit-preview">
-                <IconGlyph iconId={previewIcon(resolution.iconId)} />
+                <IconGlyph iconId={previewIcon(target, resolution)} />
                 {resolution.source === 'original' && <span className="dit-preview-hint">{t('originalPreviewHint')}</span>}
               </div>
               <div className="dit-name">
@@ -137,7 +139,7 @@ export function IconThemeSection({ store, t }: IconThemeSectionProps) {
 
       {pickerTarget && (
         <IconPicker
-          current={snapshot.config.overrides[pickerTarget.key] ?? effectiveResolution(pickerTarget, snapshot, store).iconId}
+          current={snapshot.config.overrides[pickerTarget.key] ?? effectiveResolution(pickerTarget, snapshot, store).iconId ?? getOriginalIconId(pickerTarget)}
           t={t}
           onClose={() => setPicker(null)}
           onChoose={iconId => {
