@@ -74,7 +74,7 @@ function validateRequest(value: unknown): SettingsRequest {
   return { action: 'mutate', ops, expectedRevision: value.expectedRevision as number }
 }
 
-function findDescriptor(settings: SettingsProvider): { ns: string; value: unknown; revision: number } | undefined {
+function findDescriptor(settings: SettingsProvider): { ns: string; value: unknown; revision: number; user?: unknown } | undefined {
   if (typeof settings?.describe !== 'function') return undefined
   const descriptors = settings.describe({ redactSecrets: true })
   const descriptor = descriptors.find(candidate =>
@@ -84,7 +84,12 @@ function findDescriptor(settings: SettingsProvider): { ns: string; value: unknow
     candidate.ns.endsWith('icon-theme')
   )
   if (descriptor) {
-    return { ns: descriptor.ns, value: descriptor.value, revision: descriptor.revision }
+    return {
+      ns: descriptor.ns,
+      value: descriptor.value,
+      revision: descriptor.revision,
+      user: (descriptor as any).user,
+    }
   }
   return undefined
 }
@@ -94,7 +99,13 @@ function view(settings: SettingsProvider): { value: unknown; revision: number; w
   if (descriptor === undefined) {
     return { value: {}, revision: 0, writable: settings.writable ?? true }
   }
-  return { value: descriptor.value, revision: descriptor.revision, writable: settings.writable ?? true }
+  const value = isRecord(descriptor.value) ? descriptor.value : {}
+  const user = isRecord(descriptor.user) ? descriptor.user : {}
+  const effectiveValue = {
+    ...value,
+    ...user,
+  }
+  return { value: effectiveValue, revision: descriptor.revision, writable: settings.writable ?? true }
 }
 
 function hasTrustedOrigin(req: IncomingMessage): boolean {
