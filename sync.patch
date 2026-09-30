@@ -1,5 +1,5 @@
 diff --git a/README.md b/README.md
-index 04a8297..43bde2e 100644
+index 04a8297..a949a43 100644
 --- a/README.md
 +++ b/README.md
 @@ -1,3 +1,23 @@
@@ -41,13 +41,13 @@ index 04a8297..43bde2e 100644
  
 -Supported DSH peer range: `>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0`.
 -This includes the source-only `dsh-v0.1.2-alpha.1` GitHub preview. Node.js 22 or newer is required for source builds.
-+DSH peer 兼容范围：`>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0 || >=0.1.7-rc.0 <0.2.0-0`，
-+包含 DSH Desktop 2.0.14+（`0.1.7-rc.1`）及 GitHub 预览版本。从源码构建需要 Node.js 22 或更高版本。
++DSH peer 兼容范围：`>=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0`，
++包含 DSH Desktop 2.0.14+（`0.1.7-rc.1`）、DSH Desktop 2.0.17+（`0.2.0-rc.2`）及未来 0.2.x 版本。从源码构建需要 Node.js 22 或更高版本。
  
  ## Uninstall
  
 diff --git a/README.zh.md b/README.zh.md
-index bf30fad..4395e4c 100644
+index bf30fad..c575aab 100644
 --- a/README.zh.md
 +++ b/README.zh.md
 @@ -1,3 +1,23 @@
@@ -89,8 +89,8 @@ index bf30fad..4395e4c 100644
  
 -DSH peer 兼容范围：`>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0`，
 -包含仅在 GitHub 提供源码的 `dsh-v0.1.2-alpha.1` 预览版。从源码构建需要 Node.js 22 或更高版本。
-+DSH peer 兼容范围：`>=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0 || >=0.1.7-rc.0 <0.2.0-0`，
-+包含 DSH Desktop 2.0.14+（`0.1.7-rc.1`）及 GitHub 预览版本。从源码构建需要 Node.js 22 或更高版本。
++DSH peer 兼容范围：`>=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0`，
++包含 DSH Desktop 2.0.14+（`0.1.7-rc.1`）、DSH Desktop 2.0.17+（`0.2.0-rc.2`）及未来 0.2.x 版本。从源码构建需要 Node.js 22 或更高版本。
  
  ## 卸载
  
@@ -129,8 +129,27 @@ index 9520cfe..f4b20ce 100644
  
  - `dsh.light-outline16` — line-art sun
  - `dsh.dark-outline16` — moon
+diff --git a/package-lock.json b/package-lock.json
+index ed660a4..dccbd48 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -37,10 +37,10 @@
+       },
+       "peerDependencies": {
+         "@deepseek-ai/cordis": "^4.0.1",
+-        "@deepseek-ai/dsh-client-locale": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0",
+-        "@deepseek-ai/dsh-client-runtime": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0",
+-        "@deepseek-ai/dsh-client-ui-slots": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0",
+-        "@deepseek-ai/dsh-settings": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0",
++        "@deepseek-ai/dsh-client-locale": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
++        "@deepseek-ai/dsh-client-runtime": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
++        "@deepseek-ai/dsh-client-ui-slots": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
++        "@deepseek-ai/dsh-settings": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
+         "react": "^18.3.1"
+       },
+       "peerDependenciesMeta": {
 diff --git a/package.json b/package.json
-index b1b1cd4..6132b72 100644
+index b1b1cd4..39a04bc 100644
 --- a/package.json
 +++ b/package.json
 @@ -1,5 +1,5 @@
@@ -148,10 +167,10 @@ index b1b1cd4..6132b72 100644
 -    "@deepseek-ai/dsh-client-runtime": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0",
 -    "@deepseek-ai/dsh-client-ui-slots": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0",
 -    "@deepseek-ai/dsh-settings": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0",
-+    "@deepseek-ai/dsh-client-locale": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0 || >=0.1.7-rc.0 <0.2.0-0",
-+    "@deepseek-ai/dsh-client-runtime": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0 || >=0.1.7-rc.0 <0.2.0-0",
-+    "@deepseek-ai/dsh-client-ui-slots": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0 || >=0.1.7-rc.0 <0.2.0-0",
-+    "@deepseek-ai/dsh-settings": ">=0.1.0-rc.6 <0.2.0-0 || >=0.1.1-rc.0 <0.2.0-0 || >=0.1.2-alpha.1 <0.2.0-0 || >=0.1.7-rc.0 <0.2.0-0",
++    "@deepseek-ai/dsh-client-locale": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
++    "@deepseek-ai/dsh-client-runtime": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
++    "@deepseek-ai/dsh-client-ui-slots": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
++    "@deepseek-ai/dsh-settings": ">=0.1.0-rc.6 <0.3.0-0 || >=0.1.1-rc.0 <0.3.0-0 || >=0.1.2-alpha.1 <0.3.0-0 || >=0.1.7-rc.0 <0.3.0-0 || >=0.2.0-0 <0.3.0-0",
      "react": "^18.3.1"
    },
    "peerDependenciesMeta": {
@@ -350,7 +369,7 @@ index 93faa88..1ca9f77 100644
    const unsubscribe = options.subscribe?.(schedule) ?? (() => {})
  
 diff --git a/src/client/generated/official-dsh-icons.ts b/src/client/generated/official-dsh-icons.ts
-index 889a8df..e684f39 100644
+index 889a8df..37babbc 100644
 --- a/src/client/generated/official-dsh-icons.ts
 +++ b/src/client/generated/official-dsh-icons.ts
 @@ -23,7 +23,17 @@ export const OFFICIAL_DSH_ICONS: OfficialDshIcon[] = [
@@ -477,7 +496,7 @@ index 889a8df..e684f39 100644
 +    labelEn: "Clock Outline16",
 +    category: "core",
 +    aliases: ["IconClockOutline16","clock-outline16","official","dsh","官方","时钟","时钟"],
-+    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" stroke-width=\"1.25\"><path d=\"M8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5Z\" stroke=\"currentColor\"></path><path d=\"M8 4V8.5L11.25 10.25\" stroke=\"currentColor\"></path></svg>",
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" stroke-width=\"1.25\"><path d=\"M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z\" stroke=\"currentColor\"></path><path d=\"M8 4.31V8.46L11 10.08\" stroke=\"currentColor\"></path></svg>",
      source: "@deepseek-ai/dsh-client-ui-primitives",
      license: "MIT",
    },
@@ -975,7 +994,7 @@ index 889a8df..e684f39 100644
      category: "core",
      aliases: ["IconThinkOutline14","think-outline14","official","dsh","官方","思考","思考（小）"],
 -    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 14 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7.06431 5.93342C7.68763 5.93342 8.19307 6.43904 8.19322 7.06233C8.19322 7.68573 7.68772 8.19123 7.06431 8.19123C6.44099 8.19113 5.9354 7.68567 5.9354 7.06233C5.93555 6.43911 6.44108 5.93353 7.06431 5.93342Z\" fill=\"currentColor\"></path><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M8.6815 0.963693C10.1169 0.447019 11.6266 0.374829 12.5633 1.31135C13.5 2.24805 13.4277 3.75776 12.911 5.19319C12.7126 5.74431 12.4386 6.31796 12.0965 6.89729C12.4969 7.54638 12.8141 8.19018 13.036 8.80647C13.5527 10.2419 13.6251 11.7516 12.6883 12.6883C11.7516 13.625 10.242 13.5527 8.8065 13.036C8.19022 12.8141 7.54641 12.4969 6.89732 12.0965C6.31797 12.4386 5.74435 12.7125 5.19322 12.911C3.75777 13.4276 2.2481 13.5 1.31138 12.5633C0.374859 11.6266 0.447049 10.1168 0.963724 8.68147C1.17185 8.10338 1.46321 7.50063 1.82896 6.8924C1.52182 6.35711 1.27235 5.82825 1.08872 5.31819C0.572068 3.88278 0.499714 2.37306 1.43638 1.43635C2.37308 0.499655 3.8828 0.572044 5.31822 1.08869C5.82828 1.27232 6.35715 1.5218 6.89243 1.82893C7.50066 1.46318 8.10341 1.17181 8.6815 0.963693ZM11.3573 8.01154C10.9083 8.62253 10.3901 9.22873 9.80943 9.8094C9.22877 10.3901 8.62255 10.9083 8.01158 11.3572C8.4257 11.5841 8.8287 11.7688 9.21275 11.9071C10.5456 12.3868 11.4246 12.2547 11.8397 11.8397C12.2548 11.4246 12.3869 10.5456 11.9071 9.21272C11.7688 8.82866 11.5841 8.42568 11.3573 8.01154ZM2.56529 8.02912C2.37344 8.39322 2.21495 8.74796 2.09263 9.08772C1.61291 10.4204 1.74512 11.2995 2.16001 11.7147C2.57505 12.1297 3.45415 12.2618 4.78697 11.7821C5.11057 11.6656 5.44786 11.5164 5.7938 11.3367C5.249 10.9223 4.70922 10.4533 4.19029 9.9344C3.57578 9.31987 3.03169 8.67633 2.56529 8.02912ZM6.90708 3.2469C6.24065 3.70479 5.5646 4.26321 4.91392 4.91389C4.26325 5.56456 3.70482 6.24063 3.24693 6.90705C3.72674 7.63325 4.32777 8.37459 5.03892 9.08576C5.64943 9.69627 6.28183 10.2265 6.90806 10.6678C7.59368 10.2025 8.2908 9.63076 8.96079 8.96076C9.6308 8.29075 10.2025 7.59366 10.6678 6.90803C10.2265 6.2818 9.69631 5.6494 9.08579 5.03889C8.37462 4.32773 7.63328 3.72672 6.90708 3.2469ZM11.7147 2.15998C11.2996 1.74509 10.4204 1.61288 9.08775 2.0926C8.74835 2.21479 8.39382 2.37271 8.03013 2.56428C8.67728 3.03065 9.31995 3.5758 9.93443 4.19026C10.4534 4.7092 10.9223 5.24896 11.3368 5.79377C11.5164 5.44785 11.6656 5.11052 11.7821 4.78694C12.2618 3.45416 12.1297 2.57502 11.7147 2.15998ZM4.91197 2.2176C3.57922 1.73788 2.70004 1.86995 2.28501 2.28498C1.87001 2.70003 1.73791 3.5792 2.21763 4.91194C2.31709 5.18822 2.44112 5.47427 2.58677 5.7674C3.01931 5.1887 3.51474 4.6158 4.06529 4.06526C4.61584 3.5147 5.18872 3.01928 5.76743 2.58674C5.47431 2.4411 5.18824 2.31706 4.91197 2.2176Z\" fill=\"currentColor\"></path></svg>",
-+    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" stroke-width=\"1.25\"><path d=\"M10.7554 5.24466C13.9891 8.4783 15.3769 12.3333 13.8552 13.8551C12.3335 15.3768 8.4785 13.989 5.24478 10.7553C2.01111 7.52165 0.623307 3.66664 2.14504 2.14491C3.66676 0.623189 7.52178 2.01099 10.7554 5.24466Z\" stroke=\"currentColor\"></path><path d=\"M10.7554 10.7553C7.52178 13.989 3.66676 15.3768 2.14504 13.8551C0.623307 12.3333 2.01111 8.4783 5.24478 5.24466C8.4785 2.01099 12.3335 0.623189 13.8552 2.14491C15.3769 3.66664 13.9891 7.52165 10.7554 10.7553Z\" stroke=\"currentColor\"></path><path d=\"M8.9587 8.00025C8.9587 8.52835 8.5306 8.95655 8.0024 8.95655C7.47429 8.95655 7.04614 8.52835 7.04614 8.00025C7.04614 7.47209 7.47429 7.04395 8.0024 7.04395C8.5306 7.04395 8.9587 7.47209 8.9587 8.00025Z\" fill=\"currentColor\"></path></svg>",
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" stroke-width=\"1.25\"><path d=\"M10.2854 5.71481C12.9673 8.39663 14.1182 11.5938 12.8562 12.8559C11.5942 14.1179 8.39706 12.9669 5.71518 10.2851C3.03333 7.60323 1.88236 4.40608 3.14441 3.14403C4.40644 1.882 7.6036 3.03297 10.2854 5.71481Z\" stroke=\"currentColor\"></path><path d=\"M10.2854 10.2851C7.6036 12.9669 4.40644 14.1179 3.14441 12.8559C1.88236 11.5938 3.03333 8.39663 5.71518 5.71481C8.39706 3.03297 11.5942 1.882 12.8562 3.14403C14.1182 4.40608 12.9673 7.60323 10.2854 10.2851Z\" stroke=\"currentColor\"></path><path d=\"M8.86291 8.0002C8.86291 8.47549 8.47762 8.86087 8.00224 8.86087C7.52694 8.86087 7.1416 8.47549 7.1416 8.0002C7.1416 7.52485 7.52694 7.13953 8.00224 7.13953C8.47762 7.13953 8.86291 7.52485 8.86291 8.0002Z\" fill=\"currentColor\"></path></svg>",
      source: "@deepseek-ai/dsh-client-ui-primitives",
      license: "MIT",
    },
@@ -984,7 +1003,7 @@ index 889a8df..e684f39 100644
      category: "core",
      aliases: ["IconThinkOutline16","think-outline16","official","dsh","官方","思考","思考（大）"],
 -    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8.00192 6.64454C8.75026 6.64454 9.35732 7.25169 9.35739 8.00001C9.35739 8.74838 8.7503 9.35548 8.00192 9.35548C7.25367 9.35533 6.64743 8.74829 6.64743 8.00001C6.6475 7.25178 7.25371 6.64468 8.00192 6.64454Z\" fill=\"currentColor\"></path><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M9.97165 1.29981C11.5853 0.718916 13.271 0.642197 14.3144 1.68555C15.3577 2.72902 15.2811 4.41466 14.7002 6.02833C14.4707 6.66561 14.1504 7.32937 13.75 8.00001C14.1504 8.67062 14.4707 9.33444 14.7002 9.97169C15.2811 11.5854 15.3578 13.271 14.3144 14.3145C13.271 15.3579 11.5854 15.2811 9.97165 14.7002C9.3344 14.4708 8.67059 14.1505 7.99997 13.75C7.32933 14.1505 6.66558 14.4708 6.02829 14.7002C4.41461 15.2811 2.72899 15.3578 1.68552 14.3145C0.642155 13.271 0.71887 11.5854 1.29977 9.97169C1.52915 9.33454 1.84865 8.67049 2.24899 8.00001C1.84866 7.32953 1.52915 6.66544 1.29977 6.02833C0.718852 4.41459 0.64207 2.729 1.68552 1.68555C2.72897 0.642112 4.41456 0.718887 6.02829 1.29981C6.66541 1.52918 7.32949 1.8487 7.99997 2.24903C8.67045 1.84869 9.33451 1.52919 9.97165 1.29981ZM12.9404 9.2129C12.4391 9.893 11.8616 10.5681 11.2148 11.2149C10.568 11.8616 9.89296 12.4391 9.21286 12.9404C9.62532 13.1579 10.0271 13.338 10.4121 13.4766C11.9146 14.0174 12.9172 13.8738 13.3955 13.3955C13.8737 12.9173 14.0174 11.9146 13.4765 10.4121C13.3379 10.0271 13.1578 9.62535 12.9404 9.2129ZM3.05856 9.2129C2.84121 9.62523 2.66197 10.0272 2.52341 10.4121C1.98252 11.9146 2.12627 12.9172 2.60446 13.3955C3.08278 13.8737 4.08544 14.0174 5.58786 13.4766C5.97264 13.338 6.37389 13.1577 6.7861 12.9404C6.10624 12.4393 5.43168 11.8614 4.78513 11.2149C4.13823 10.5679 3.55992 9.89313 3.05856 9.2129ZM7.99899 3.792C7.23179 4.31419 6.45306 4.95512 5.70407 5.70411C4.95509 6.45309 4.31415 7.23184 3.79196 7.99903C4.3143 8.76666 4.95471 9.54653 5.70407 10.2959C6.45309 11.0449 7.23271 11.6848 7.99997 12.207C8.76725 11.6848 9.54683 11.0449 10.2959 10.2959C11.0449 9.54686 11.6848 8.76729 12.207 8.00001C11.6848 7.23275 11.0449 6.45312 10.2959 5.70411C9.5465 4.95475 8.76662 4.31434 7.99899 3.792ZM5.58786 2.52344C4.08533 1.98255 3.08272 2.12625 2.60446 2.6045C2.12621 3.08275 1.98252 4.08536 2.52341 5.5879C2.66189 5.97253 2.8414 6.37409 3.05856 6.78614C3.55983 6.10611 4.1384 5.43189 4.78513 4.78516C5.43186 4.13843 6.10606 3.55987 6.7861 3.0586C6.37405 2.84144 5.97249 2.66192 5.58786 2.52344ZM13.3955 2.6045C12.9172 2.12631 11.9146 1.98257 10.4121 2.52344C10.0272 2.66201 9.62519 2.84125 9.21286 3.0586C9.8931 3.55996 10.5679 4.13827 11.2148 4.78516C11.8614 5.43172 12.4392 6.10627 12.9404 6.78614C13.1577 6.37393 13.338 5.97267 13.4765 5.5879C14.0174 4.08549 13.8736 3.08281 13.3955 2.6045Z\" fill=\"currentColor\"></path></svg>",
-+    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" stroke-width=\"1.25\"><path d=\"M10.7554 5.24466C13.9891 8.4783 15.3769 12.3333 13.8552 13.8551C12.3335 15.3768 8.4785 13.989 5.24478 10.7553C2.01111 7.52165 0.623307 3.66664 2.14504 2.14491C3.66676 0.623189 7.52178 2.01099 10.7554 5.24466Z\" stroke=\"currentColor\"></path><path d=\"M10.7554 10.7553C7.52178 13.989 3.66676 15.3768 2.14504 13.8551C0.623307 12.3333 2.01111 8.4783 5.24478 5.24466C8.4785 2.01099 12.3335 0.623189 13.8552 2.14491C15.3769 3.66664 13.9891 7.52165 10.7554 10.7553Z\" stroke=\"currentColor\"></path><path d=\"M8.9587 8.00025C8.9587 8.52835 8.5306 8.95655 8.0024 8.95655C7.47429 8.95655 7.04614 8.52835 7.04614 8.00025C7.04614 7.47209 7.47429 7.04395 8.0024 7.04395C8.5306 7.04395 8.9587 7.47209 8.9587 8.00025Z\" fill=\"currentColor\"></path></svg>",
++    svg: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" stroke-width=\"1.25\"><path d=\"M10.2854 5.71481C12.9673 8.39663 14.1182 11.5938 12.8562 12.8559C11.5942 14.1179 8.39706 12.9669 5.71518 10.2851C3.03333 7.60323 1.88236 4.40608 3.14441 3.14403C4.40644 1.882 7.6036 3.03297 10.2854 5.71481Z\" stroke=\"currentColor\"></path><path d=\"M10.2854 10.2851C7.6036 12.9669 4.40644 14.1179 3.14441 12.8559C1.88236 11.5938 3.03333 8.39663 5.71518 5.71481C8.39706 3.03297 11.5942 1.882 12.8562 3.14403C14.1182 4.40608 12.9673 7.60323 10.2854 10.2851Z\" stroke=\"currentColor\"></path><path d=\"M8.86291 8.0002C8.86291 8.47549 8.47762 8.86087 8.00224 8.86087C7.52694 8.86087 7.1416 8.47549 7.1416 8.0002C7.1416 7.52485 7.52694 7.13953 8.00224 7.13953C8.47762 7.13953 8.86291 7.52485 8.86291 8.0002Z\" fill=\"currentColor\"></path></svg>",
      source: "@deepseek-ai/dsh-client-ui-primitives",
      license: "MIT",
    },
@@ -1228,218 +1247,6 @@ index 61049ba..0989b8c 100644
      settingsCtx.effect(
        () => ctx.webServer.register({ kind: 'exact', path: SETTINGS_API_PATH, handler: createSettingsHandler(settingsCtx.settings) }),
        'dsh-icon-theme: settings API',
-diff --git a/sync.sh b/sync.sh
-new file mode 100755
-index 0000000..bd07e20
---- /dev/null
-+++ b/sync.sh
-@@ -0,0 +1,206 @@
-+#!/bin/bash
-+set -e
-+
-+# ==============================================================================
-+# sync.sh - dsh-icon-theme 同步与定制补丁维护脚本 (Patch-First, Smart-Merge)
-+# ==============================================================================
-+
-+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-+cd "$SCRIPT_DIR"
-+
-+REPO_NAME="$(basename "$SCRIPT_DIR")"
-+PATCH_FILE="$SCRIPT_DIR/sync.patch"
-+
-+AUTO_YES=false
-+SKIP_TEST=false
-+
-+for arg in "$@"; do
-+    case "$arg" in
-+        -y|--yes) AUTO_YES=true ;;
-+        --skip-test) SKIP_TEST=true ;;
-+        -h|--help)
-+            echo "用法: $0 [选项]"
-+            echo "选项:"
-+            echo "  -y, --yes      非交互模式，自动确认推送"
-+            echo "  --skip-test    跳过 npm test 验证"
-+            echo "  -h, --help     显示帮助信息"
-+            exit 0
-+            ;;
-+    esac
-+done
-+
-+echo "=================================================="
-+echo "  同步 $REPO_NAME (Patch-First, Smart-Merge)"
-+echo "=================================================="
-+
-+# 检查 git remote
-+if ! git remote get-url upstream >/dev/null 2>&1; then
-+    echo "❌ 错误: 未配置 upstream 远程仓库。"
-+    echo "💡 请先运行: git remote add upstream https://github.com/yzke/dsh-icon-theme.git"
-+    exit 1
-+fi
-+
-+if ! git remote get-url origin >/dev/null 2>&1; then
-+    echo "❌ 错误: 未配置 origin 远程仓库。"
-+    exit 1
-+fi
-+
-+# Step 0: 创建安全临时备份目录
-+TMP_DIR="$(mktemp -d /tmp/dsh_icon_theme_sync_XXXXXX)"
-+cleanup() {
-+    rm -rf "$TMP_DIR"
-+}
-+trap cleanup EXIT INT TERM
-+
-+if [ -f "$PATCH_FILE" ]; then
-+    cp "$PATCH_FILE" "$TMP_DIR/sync.patch"
-+fi
-+if [ -f "$SCRIPT_DIR/sync.sh" ]; then
-+    cp "$SCRIPT_DIR/sync.sh" "$TMP_DIR/sync.sh"
-+fi
-+
-+# Step 1: 拉取上游与远端最新提交
-+echo "[1/4] 拉取 upstream 与 origin 最新提交..."
-+git fetch upstream --tags
-+git fetch origin
-+
-+# 暂存本地未提交的修改（如果有）
-+STASHED=false
-+if ! git diff --quiet HEAD 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
-+    echo "📦 检测到工作区未提交修改，正在暂存..."
-+    git stash push -u -m "sync.sh-auto-stash-$(date +%s)" 2>/dev/null || true
-+    STASHED=true
-+fi
-+
-+# Step 2: 更新 main 分支到 upstream/main
-+echo "[2/4] 更新 local main 分支到 upstream/main..."
-+if git show-ref --verify --quiet refs/heads/main; then
-+    git branch -f main upstream/main
-+else
-+    git branch main upstream/main
-+fi
-+
-+# Step 3: 应用同步策略
-+echo "[3/4] 应用定制修改..."
-+APPLIED_VIA_PATCH=false
-+
-+if [ -s "$TMP_DIR/sync.patch" ]; then
-+    echo "   正在测试 Patch 是否适用于最新 upstream/main..."
-+    git checkout main --quiet
-+    if git apply --check "$TMP_DIR/sync.patch" 2>/dev/null; then
-+        echo "   ✅ Patch 校验通过，应用干净线性历史（策略 1）..."
-+        git checkout -B custom main --quiet
-+        git apply "$TMP_DIR/sync.patch"
-+        cp "$TMP_DIR/sync.sh" "$SCRIPT_DIR/sync.sh"
-+        chmod +x "$SCRIPT_DIR/sync.sh"
-+        git add -A
-+        git commit -m "sync: 与 upstream/main 同步 ($(date +%Y-%m-%d))" --quiet || true
-+        APPLIED_VIA_PATCH=true
-+        echo "   ✅ 策略 1 应用成功"
-+    else
-+        echo "   ⚠️  Patch 与上游存在变动冲突，切换到 Smart Merge（策略 2）..."
-+    fi
-+fi
-+
-+if [ "$APPLIED_VIA_PATCH" = false ]; then
-+    git checkout custom --quiet
-+    cp "$TMP_DIR/sync.sh" "$SCRIPT_DIR/sync.sh"
-+    chmod +x "$SCRIPT_DIR/sync.sh"
-+
-+    echo "   执行 Smart Merge..."
-+    git merge main --no-commit --no-ff 2>/dev/null || true
-+    CONFLICTS=$(git diff --name-only --diff-filter=U 2>/dev/null || true)
-+
-+    if [ -z "$CONFLICTS" ]; then
-+        git add -A
-+        git commit -m "merge: 合并 upstream/main ($(date +%Y-%m-%d))" --quiet 2>/dev/null || true
-+    else
-+        for f in $CONFLICTS; do
-+            case "$f" in
-+                README*|readme*)
-+                    echo "   📄 $f: 保留本地 Fork 头部说明 + 结合上游内容"
-+                    FORK_HEADER=$(awk '/^> \[!NOTE\]/{p=1} p{print} /^$/{if(p)exit}' "$f" 2>/dev/null || true)
-+                    if [ -n "$FORK_HEADER" ]; then
-+                        git show "upstream/main:$f" > "$f.upstream"
-+                        printf '%s\n\n' "$FORK_HEADER" > "$f.header"
-+                        cat "$f.header" "$f.upstream" > "$f"
-+                        rm -f "$f.upstream" "$f.header"
-+                        echo "      ✅ Fork 说明已保留，正文已同步上游版本"
-+                    else
-+                        git checkout upstream/main -- "$f"
-+                        echo "      ✅ 未检测到 Fork 说明，恢复为上游版本"
-+                    fi
-+                    git add "$f"
-+                    ;;
-+                *)
-+                    echo "   📄 $f: 代码冲突，采用本地定制版本（--ours）"
-+                    git checkout --ours "$f"
-+                    git add "$f"
-+                    ;;
-+            esac
-+        done
-+
-+        git add -A
-+        git commit -m "merge: 智能合并 upstream/main ($(date +%Y-%m-%d))" --quiet 2>/dev/null || true
-+        echo "   ✅ Smart Merge 完成"
-+    fi
-+fi
-+
-+# 恢复此前暂存的工作区改动
-+if [ "$STASHED" = true ]; then
-+    echo "📦 恢复此前暂存的工作区改动..."
-+    git stash pop --quiet 2>/dev/null || true
-+fi
-+
-+# Step 4: 重新生成干净的 sync.patch（排除 sync.patch、sync.sh 以及 pnpm-lock.yaml）
-+echo "[4/4] 重新生成干净的 sync.patch..."
-+git diff upstream/main...custom -- . ':!sync.patch' ':!sync.sh' ':!pnpm-lock.yaml' > "$PATCH_FILE"
-+PATCH_LINES=$(wc -l < "$PATCH_FILE" | tr -d ' ')
-+echo "✅ sync.patch 生成完毕 (共 $PATCH_LINES 行，已排除同步脚本与快照自身)"
-+
-+# 确保 sync.sh 和 sync.patch 都被暂存并提交
-+git add sync.patch sync.sh
-+
-+if ! git diff --cached --quiet; then
-+    git commit -m "chore: 更新 sync.patch 与 sync.sh 快照 ($(date +%Y-%m-%d))" --quiet || true
-+fi
-+
-+# 自动测试与检查
-+if [ "$SKIP_TEST" = false ]; then
-+    if command -v npm >/dev/null 2>&1; then
-+        echo ""
-+        echo "🔍 正在运行项目测试与构建验证..."
-+        if npm test; then
-+            echo "✅ 测试验证全部通过！"
-+        else
-+            echo "❌ 警告: 测试失败，请检查代码！"
-+        fi
-+    fi
-+fi
-+
-+# 推送到 origin/custom
-+echo ""
-+DO_PUSH=false
-+if [ "$AUTO_YES" = true ]; then
-+    DO_PUSH=true
-+elif [ -t 0 ]; then
-+    read -p "是否推送到 origin/custom? [y/N] " -n 1 -r < /dev/tty
-+    echo
-+    if [[ $REPLY =~ ^[Yy]$ ]]; then
-+        DO_PUSH=true
-+    fi
-+fi
-+
-+if [ "$DO_PUSH" = true ]; then
-+    echo "🚀 正在推送到 origin/custom..."
-+    if [ "$APPLIED_VIA_PATCH" = true ]; then
-+        git push --force-with-lease origin custom
-+    else
-+        git push origin custom
-+    fi
-+    echo "✅ 已成功推送到 origin/custom"
-+else
-+    echo "ℹ️  跳过远程推送（可稍后手动执行 git push origin custom）"
-+fi
-+
-+echo "🎉 $REPO_NAME 同步流程全部完成！"
 diff --git a/tests/catalog.spec.ts b/tests/catalog.spec.ts
 index f5dc86a..7513f9f 100644
 --- a/tests/catalog.spec.ts
@@ -1568,18 +1375,36 @@ index 6a4ecef..24c329b 100644
      fireEvent.click(within(row).getByRole('button', { name: 'Change' }))
      expect(screen.getByRole('button', { name: 'Apps' })).toBeTruthy()
 diff --git a/tests/package-compat.spec.ts b/tests/package-compat.spec.ts
-index c44d033..cd459f8 100644
+index c44d033..0d0143f 100644
 --- a/tests/package-compat.spec.ts
 +++ b/tests/package-compat.spec.ts
-@@ -27,6 +27,8 @@ describe('DSH peer compatibility', () => {
+@@ -27,7 +27,13 @@ describe('DSH peer compatibility', () => {
      '0.1.1',
      '0.1.2-alpha.1',
      '0.1.2',
 +    '0.1.7-rc.1',
 +    '0.1.7',
      '0.1.99',
++    '0.2.0-alpha.1',
++    '0.2.0-rc.2',
++    '0.2.0',
++    '0.2.99',
    ])('accepts supported host version %s', version => {
      for (const peer of injectedDshPeers) {
+       expect(satisfies(version, manifest.peerDependencies[peer]!), peer).toBe(true)
+@@ -37,9 +43,9 @@ describe('DSH peer compatibility', () => {
+   it.each([
+     '0.1.0-rc.5',
+     '0.1.2-alpha.0',
+-    '0.2.0-0',
+-    '0.2.0-alpha.1',
+-    '0.2.0',
++    '0.3.0-0',
++    '0.3.0-alpha.1',
++    '0.3.0',
+   ])('rejects unsupported host version %s', version => {
+     for (const peer of injectedDshPeers) {
+       expect(satisfies(version, manifest.peerDependencies[peer]!), peer).toBe(false)
 diff --git a/tests/resolve.spec.ts b/tests/resolve.spec.ts
 index 7b87be7..43f6627 100644
 --- a/tests/resolve.spec.ts
