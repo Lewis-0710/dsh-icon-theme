@@ -107,36 +107,57 @@ const ZH_LABELS = {
 const SIZE_SUFFIX = { '12': '（特小）', '14': '（小）', '16': '（大）', '20': '（特大）', '8x10': '（特小）' }
 
 function extractExpr(src, name) {
-  const start = src.indexOf(`const ${name} = `)
-  if (start < 0) return null
-  const arrow = src.indexOf('=>', start)
-  let i = arrow + 2
-  while (i < src.length && /\s/.test(src[i])) i++
-  const begin = i
-  let depth = 0, inStr = null, esc = false, end = -1
-  for (; i < src.length; i++) {
-    const c = src[i]
-    if (inStr) {
-      if (esc) esc = false
-      else if (c === '\\') esc = true
-      else if (c === inStr) inStr = null
-      continue
+  const base = name.startsWith('Icon') ? name.slice(4) : name
+  const candidates = [
+    name,
+    name.replace(/(\d+(?:x\d+)?)$/, 'Artwork'),
+    base.replace(/(\d+(?:x\d+)?)$/, 'Artwork'),
+    name.replace(/(\d+(?:x\d+)?)$/, 'Regular'),
+    name.replace(/(\d+(?:x\d+)?)$/, ''),
+    base.replace(/(\d+(?:x\d+)?)$/, ''),
+  ]
+  for (const candidate of candidates) {
+    const start = src.indexOf(`const ${candidate} = `)
+    if (start < 0) continue
+    const arrow = src.indexOf('=>', start)
+    if (arrow < 0) continue
+    let i = arrow + 2
+    while (i < src.length && /\s/.test(src[i])) i++
+    const begin = i
+    let depth = 0, inStr = null, esc = false, end = -1
+    for (; i < src.length; i++) {
+      const c = src[i]
+      if (inStr) {
+        if (esc) esc = false
+        else if (c === '\\') esc = true
+        else if (c === inStr) inStr = null
+        continue
+      }
+      if (c === '"' || c === "'" || c === '`') { inStr = c; continue }
+      if (c === '(' || c === '[' || c === '{') depth++
+      else if (c === ')' || c === ']' || c === '}') depth--
+      else if (c === ';' && depth === 0) { end = i; break }
     }
-    if (c === '"' || c === "'" || c === '`') { inStr = c; continue }
-    if (c === '(' || c === '[' || c === '{') depth++
-    else if (c === ')' || c === ']' || c === '}') depth--
-    else if (c === ';' && depth === 0) { end = i; break }
+    if (end > begin) {
+      const body = src.slice(begin, end)
+      const forwardMatch = body.match(/jsx(?:s)?\(([A-Za-z0-9]+Artwork)/)
+      if (forwardMatch) {
+        const nested = extractExpr(src, forwardMatch[1])
+        if (nested) return nested
+      }
+      return body
+    }
   }
-  return end < 0 ? null : src.slice(begin, end)
+  return null
 }
 
 function el(tag, props) { return { tag, props } }
 function evalIcon(src, name) {
   const expr = extractExpr(src, name)
   if (expr === null) throw new Error(`extract failed: ${name}`)
-  const fn = Function('jsx', 'jsxs', 'Fragment', 'size', 'className',
+  const fn = Function('jsx', 'jsxs', 'Fragment', 'size', 'className', 'strokeWidth',
     'return (' + expr + ')')
-  return fn(el, el, Symbol('Fragment'), 16, undefined)
+  return fn(el, el, Symbol.for('Fragment'), 16, undefined, 1.25)
 }
 
 function esc(v) {

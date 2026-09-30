@@ -27,7 +27,13 @@ describe('DSH peer compatibility', () => {
     '0.1.1',
     '0.1.2-alpha.1',
     '0.1.2',
+    '0.1.7-rc.1',
+    '0.1.7',
     '0.1.99',
+    '0.2.0-alpha.1',
+    '0.2.0-rc.2',
+    '0.2.0',
+    '0.2.99',
   ])('accepts supported host version %s', version => {
     for (const peer of injectedDshPeers) {
       expect(satisfies(version, manifest.peerDependencies[peer]!), peer).toBe(true)
@@ -37,9 +43,9 @@ describe('DSH peer compatibility', () => {
   it.each([
     '0.1.0-rc.5',
     '0.1.2-alpha.0',
-    '0.2.0-0',
-    '0.2.0-alpha.1',
-    '0.2.0',
+    '0.3.0-0',
+    '0.3.0-alpha.1',
+    '0.3.0',
   ])('rejects unsupported host version %s', version => {
     for (const peer of injectedDshPeers) {
       expect(satisfies(version, manifest.peerDependencies[peer]!), peer).toBe(false)

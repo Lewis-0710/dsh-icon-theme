@@ -3,7 +3,7 @@ import { Config, normalizeConfig } from './config.ts'
 import type { IconThemeConfig } from './config.ts'
 import { installSettingsApi } from './settings-api.ts'
 
-export { Config, DEFAULT_CONFIG, normalizeConfig } from './config.ts'
+export { Config, DEFAULT_CONFIG, normalizeConfig, unwrapVolatile } from './config.ts'
 export type { IconThemeConfig } from './config.ts'
 
 export const name = 'dsh-icon-theme-custom'
